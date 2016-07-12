@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.models.ContentModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
 
@@ -26,7 +27,7 @@ public class CustomPagerAdapter extends PagerAdapter {
 
     Context context;
 //    private int pos = 0;
-    private List<ContentModel> data;
+    private List<ContentModel> data = new ArrayList<>();
 
     public CustomPagerAdapter(Context context, List<ContentModel> data) {
         this.data = data;
@@ -41,9 +42,11 @@ public class CustomPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
 //        ImageView view = new ImageView(context);
+        Log.d(TAG, "asdgasdgasdg");
+        data.get(position);
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        View layout = inflater.inflate(R.layout.layout_content, null);
+        View layout = inflater.inflate(R.layout.layout_content, collection, false);
         TextView view = (TextView) layout.findViewById(R.id.tvContent);
         view.setText("1->" + position + " " + data.get(position).getUrl());
 
