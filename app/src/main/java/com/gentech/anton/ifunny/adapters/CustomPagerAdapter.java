@@ -26,7 +26,7 @@ public class CustomPagerAdapter extends PagerAdapter {
     public static final String TAG = CustomPagerAdapter.class.getSimpleName();
 
     Context context;
-//    private int pos = 0;
+    private int pos = 0;
     private List<ContentModel> data = new ArrayList<>();
 
     public CustomPagerAdapter(Context context, List<ContentModel> data) {
@@ -40,18 +40,16 @@ public class CustomPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup collection, int position) {
+    public Object instantiateItem(ViewGroup container, int position) {
 //        ImageView view = new ImageView(context);
-        Log.d(TAG, "asdgasdgasdg");
-        data.get(position);
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        View layout = inflater.inflate(R.layout.layout_content, collection, false);
+        View layout = inflater.inflate(R.layout.layout_content, container, false);
         TextView view = (TextView) layout.findViewById(R.id.tvContent);
-        view.setText("1->" + position + " " + data.get(position).getUrl());
+        view.setText("1->" + position + " " + data.get(pos).getUrl());
 
-
-        collection.addView(view, 0);
+        container.removeAllViews();
+        container.addView(view, 0);
 //        view.setScaleType(ImageView.ScaleType.FIT_XY);
 
 //        ContentModel contentModel = data.get(position);
@@ -60,11 +58,11 @@ public class CustomPagerAdapter extends PagerAdapter {
 
 //        view.setImageURI(Uri.parse(data.get(position).getUrl()));
 
-//        if (pos >= data.size() -1) {
-//            pos = 0;
-//        } else {
-//            ++pos;
-//        }
+        if (pos >= data.size() -1) {
+            pos = 0;
+        } else {
+            ++pos;
+        }
 
         return view;
     }

@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Bas
             Log.d(TAG, bm.toString());
             if (!bm.videos.isEmpty()) {
                 contentModel = new ContentModel(bm.id, bm.title, bm.url, bm.views, bm.countComment, ContentType.VIDEO);
-            } else if (!bm.images.isEmpty()) {
+            } else if (bm.images.isEmpty()) {
                 contentModel = new ContentModel(bm.id, bm.title, bm.img, bm.views, bm.countComment, ContentType.GIF);
             } else {
                 contentModel = new ContentModel(bm.id, bm.title, bm.images.get(0), bm.views, bm.countComment, ContentType.IMAGE);
