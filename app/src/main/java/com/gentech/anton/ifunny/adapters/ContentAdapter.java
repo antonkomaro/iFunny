@@ -4,12 +4,16 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.models.ContentModel;
 
@@ -28,10 +32,10 @@ public class ContentAdapter extends PagerAdapter {
     Context context;
     private List<ContentModel> data = new ArrayList<>();
 
-    @Bind(R.id.iv_gallery_item)
-    ImageView ivContent;
+    @Bind(R.id.iv_content_item)
+    SimpleDraweeView ivContent;
 
-    @Bind(R.id.tvContent)
+    @Bind(R.id.tv_content_item)
     TextView tvContent;
 
     public ContentAdapter(Context context, List<ContentModel> data) {
@@ -46,9 +50,11 @@ public class ContentAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rootView = inflater.inflate(R.layout.item_content, container, false);
         ButterKnife.bind(this, rootView);
+
         loadContent(position, container, rootView);
         return rootView;
     }
@@ -70,10 +76,47 @@ public class ContentAdapter extends PagerAdapter {
     }
 
     private void loadContent(int position, ViewGroup container, View rootView) {
-        String url = data.get(position).getUrl();
-        ivContent.setImageURI(Uri.parse(url));
+        ContentModel content = data.get(position);
+        if (content == null) {
+            Log.e(TAG, context.getString(R.string.no_content_found));
+            return;
+        }
+
+        String url = content.getUrl();
+        switch (content.getContentType()) {
+            case IMAGE:
+                loadImage(url);
+                break;
+            case GIF:
+                loadGif(url);
+                break;
+            case VIDEO:
+                loadVideo(url);
+                break;
+            default:
+                Log.e(TAG, context
+                        .getString(R.string.unknown_content_type));
+                return;
+        }
+
         tvContent.setText(data.get(position).getTitle());
         container.addView(rootView);
+    }
+
+    private void loadVideo(String url) {
+
+    }
+
+    private void loadGif(String url) {
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setUri(url)
+                .setAutoPlayAnimations(true)
+                .build();
+        ivContent.setController(controller);
+    }
+
+    private void loadImage(String url) {
+        ivContent.setImageURI(Uri.parse(url));
     }
 
 }

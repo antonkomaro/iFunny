@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">iFunny</string>
+    <string name="no_content_found">No content found</string>
+    <string name="unknown_content_type">Unknown content type</string>
 </resources>
