@@ -1,16 +1,17 @@
 package com.gentech.anton.ifunny.ui;
 
-import android.support.v4.view.PagerAdapter;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.gentech.anton.ifunny.R;
-import com.gentech.anton.ifunny.adapters.CustomPagerAdapter;
+import com.gentech.anton.ifunny.adapters.ContentAdapter;
 import com.gentech.anton.ifunny.enums.ContentType;
 import com.gentech.anton.ifunny.models.ContentModel;
-import com.gentech.anton.ifunny.rest.RestClient;
+import com.gentech.anton.ifunny.rest.RestService;
+import com.gentech.anton.ifunny.rest.ServiceFactory;
 import com.gentech.anton.ifunny.rest.model.BaseModel;
 
 import java.util.ArrayList;
@@ -18,41 +19,56 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements Callback<List<BaseModel>> {
+public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
-
-    private PagerAdapter pagerAdapter;
-    private RestClient restClient;
 
     @Bind(R.id.frame)
     ViewPager mPager;
 
-//    private int[] mImageArray = {android.R.drawable.ic_input_add,
-//            android.R.drawable.ic_btn_speak_now, android.R.drawable.ic_dialog_map,
-//            android.R.drawable.ic_dialog_dialer};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
         ButterKnife.bind(MainActivity.this);
 
-        restClient = new RestClient(this);
         loadData();
     }
 
     private void loadData() {
-        restClient.loadData();
+        RestService service = ServiceFactory.createRestService(RestService.class, RestService.SERVICE_ENDPOINT);
+        service.loadData()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<BaseModel>>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "loadData:onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(List<BaseModel> baseModels) {
+                        setAdapter(baseModels);
+                    }
+                });
     }
 
-    @Override
-    public void onResponse(Response<List<BaseModel>> response, Retrofit retrofit) {
-        List<BaseModel> baseModel = response.body();
+    private void setAdapter(List<BaseModel> baseModel) {
+        List<ContentModel> data = parseData(baseModel);
+        final ContentAdapter contentAdapter = new ContentAdapter(this, data);
+        mPager.setAdapter(contentAdapter);
+    }
 
+    @NonNull
+    private List<ContentModel> parseData(List<BaseModel> baseModel) {
         List<ContentModel> data = new ArrayList<>();
         ContentModel contentModel;
         for (BaseModel bm : baseModel) {
@@ -64,22 +80,9 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Bas
             } else {
                 contentModel = new ContentModel(bm.id, bm.title, bm.images.get(0), bm.views, bm.countComment, ContentType.IMAGE);
             }
-            Log.d(TAG, "contentModel " + contentModel);
             data.add(contentModel);
         }
-        Log.d(TAG, "data size " + data.size());
-        onDataLoaded(data);
-
-    }
-
-    @Override
-    public void onFailure(Throwable t) {
-        Log.e(TAG, t.getLocalizedMessage());
-    }
-
-    private void onDataLoaded(List<ContentModel> data) {
-        pagerAdapter = new CustomPagerAdapter(this, data);
-        mPager.setAdapter(pagerAdapter);
+        return data;
     }
 
 }

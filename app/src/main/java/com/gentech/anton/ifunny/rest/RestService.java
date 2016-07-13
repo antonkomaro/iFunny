@@ -4,15 +4,17 @@ import com.gentech.anton.ifunny.rest.model.BaseModel;
 
 import java.util.List;
 
-import retrofit.Call;
 import retrofit.http.GET;
+import rx.Observable;
 
 
 /**
  * Created by anton on 12.07.16.
  */
-public interface RestApi {
+public interface RestService {
+    String SERVICE_ENDPOINT = "http://api.demo-stage.info/";
+
     @GET("posts?portal=8")
-    Call<List<BaseModel>> loadData();
+    Observable<List<BaseModel>> loadData();
 }
 
