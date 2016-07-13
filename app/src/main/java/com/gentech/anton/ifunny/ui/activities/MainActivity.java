@@ -1,4 +1,4 @@
-package com.gentech.anton.ifunny.ui;
+package com.gentech.anton.ifunny.ui.activities;
 
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.adapters.ContentAdapter;
-import com.gentech.anton.ifunny.enums.ContentType;
+import com.gentech.anton.ifunny.utils.ContentType;
 import com.gentech.anton.ifunny.models.ContentModel;
 import com.gentech.anton.ifunny.rest.RestService;
 import com.gentech.anton.ifunny.rest.ServiceFactory;

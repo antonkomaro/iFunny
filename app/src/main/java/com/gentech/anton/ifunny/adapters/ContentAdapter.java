@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -16,6 +16,13 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.models.ContentModel;
+import com.gentech.anton.ifunny.ui.activities.MainActivity;
+import com.gentech.anton.ifunny.ui.fragments.VideoFragment;
+import com.gentech.anton.ifunny.utils.Constants;
+import com.gentech.anton.ifunny.utils.Utils;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +36,19 @@ import butterknife.ButterKnife;
 public class ContentAdapter extends PagerAdapter {
     public static final String TAG = ContentAdapter.class.getSimpleName();
 
-    Context context;
+    private Context context;
+    private View rootView;
+
     private List<ContentModel> data = new ArrayList<>();
 
-    @Bind(R.id.iv_content_item)
+    @Bind(R.id.iv_content)
     SimpleDraweeView ivContent;
 
-    @Bind(R.id.tv_content_item)
+    @Bind(R.id.tv_content)
     TextView tvContent;
+
+    @Bind(R.id.fl_video_container)
+    FrameLayout flVideoContainer;
 
     public ContentAdapter(Context context, List<ContentModel> data) {
         this.data = data;
@@ -55,7 +67,14 @@ public class ContentAdapter extends PagerAdapter {
         View rootView = inflater.inflate(R.layout.item_content, container, false);
         ButterKnife.bind(this, rootView);
 
+//        ivContent = (SimpleDraweeView) rootView.findViewById(R.id.iv_content);
+//        tvContent = (TextView) rootView.findViewById(R.id.tv_content);
+//        youTubePlayerFragment = (YouTubePlayerFragment) ((MainActivity)context).getFragmentManager()
+//                .findFragmentById(R.id.video_fragment);
+
         loadContent(position, container, rootView);
+
+        this.rootView = rootView;
         return rootView;
     }
 
@@ -104,8 +123,42 @@ public class ContentAdapter extends PagerAdapter {
     }
 
     private void loadVideo(String url) {
+//        String videoId = Utils.getYoutubeVideoIdFromUrl(url);
 
+        VideoFragment videoFragment = VideoFragment.newInstance("ztRydkK--l8");
+        videoFragment.init();
+        ((MainActivity)context).getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fl_video_container, videoFragment).commit();
+
+
+//        createYoutubeFragment(url, context);
     }
+
+//    private void createYoutubeFragment(String url, Context context) {
+//        YouTubePlayerSupportFragment youTubePlayerFragment = new YouTubePlayerSupportFragment();
+//        youTubePlayerFragment.initialize(Constants.YOUTUBE_API_KEY,  new YouTubePlayer.OnInitializedListener(){
+//            @Override
+//            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+//                String videoId = Utils.getYoutubeVideoIdFromUrl(url);
+//                youTubePlayer.loadVideo(videoId);
+//                youTubePlayer.play();
+//            }
+//
+//            @Override
+//            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+//                if (youTubeInitializationResult.toString().equals(context.getString(R.string.service_missing))) {
+//                    Utils.showSnackMessage(rootView, context.getString(R.string.player_error));
+//                }
+//
+//                Log.e(TAG, context.getString(R.string.player_error));
+//            }
+//        });
+//
+//        ((MainActivity) context).getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.fl_video_container, youTubePlayerFragment)
+//                .commit();
+//    }
 
     private void loadGif(String url) {
         DraweeController controller = Fresco.newDraweeControllerBuilder()

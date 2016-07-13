@@ -1,6 +1,4 @@
-package com.gentech.anton.ifunny.enums;
-
-import com.gentech.anton.ifunny.R;
+package com.gentech.anton.ifunny.utils;
 
 /**
  * Created by anton on 12.07.16.
