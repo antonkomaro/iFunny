@@ -16,22 +16,29 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 public class VideoFragment extends YouTubePlayerSupportFragment {
     public static final String TAG = VideoFragment.class.getSimpleName();
 
-//    private String currentVideoID = "video_id";
     private YouTubePlayer activePlayer;
 
-    public static VideoFragment newInstance(String videoId) {
+    public static VideoFragment newInstance(String contentUrl, String contentTitle) {
 
         VideoFragment videoFragment = new VideoFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putString("videoId", videoId);
+        bundle.putString("contentUrl", contentUrl);
+        bundle.putString("contentTitle", contentTitle);
 
         videoFragment.setArguments(bundle);
+
         return videoFragment;
     }
 
-    public void init() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();
+    }
 
+    private void init() {
+        Log.d(TAG, "init");
         initialize(Constants.YOUTUBE_API_KEY, new YouTubePlayer.OnInitializedListener() {
 
             @Override
@@ -48,8 +55,8 @@ public class VideoFragment extends YouTubePlayerSupportFragment {
                 activePlayer = player;
                 activePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
                 if (!wasRestored) {
-                    activePlayer.loadVideo(getArguments().getString("videoId"), 0);
-
+                    Log.d(TAG, "init success if (!wasRestored)");
+                    activePlayer.loadVideo("oMU8X4j9iZc", 0);
                 }
             }
         });

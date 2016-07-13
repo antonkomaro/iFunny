@@ -4,6 +4,8 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.TextView;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,10 +15,20 @@ import java.util.regex.Pattern;
 public class Utils {
 
     public static String getYoutubeVideoIdFromUrl(String url) {
-        Pattern compiledPattern = Pattern.compile(Constants.YOUTUBE_PATTERN);
-        Matcher matcher = compiledPattern.matcher(url);
-        if (matcher.find()) {
-            return matcher.group();
+//        Pattern compiledPattern = Pattern.compile(Constants.YOUTUBE_PATTERN);
+//        Matcher matcher = compiledPattern.matcher(url);
+//        if (matcher.find()) {
+//            return matcher.group();
+//        }
+//        return "-1";
+        URL youtubeURL = null;
+        try {
+            youtubeURL = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        if (youtubeURL != null) {
+            return youtubeURL.getQuery();
         }
         return "-1";
     }
