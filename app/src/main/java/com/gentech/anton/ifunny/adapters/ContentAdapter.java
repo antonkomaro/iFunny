@@ -1,22 +1,11 @@
 package com.gentech.anton.ifunny.adapters;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
-import com.gentech.anton.ifunny.R;
-import com.gentech.anton.ifunny.models.ContentModel;
-import com.gentech.anton.ifunny.ui.activities.MainActivity;
-import com.gentech.anton.ifunny.ui.fragments.GifFragment;
-import com.gentech.anton.ifunny.ui.fragments.ImageFragment;
-import com.gentech.anton.ifunny.ui.fragments.VideoFragment;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,9 +32,11 @@ public class ContentAdapter extends FragmentStatePagerAdapter {
         return fragments.size();
     }
 
-    public void add(List<Fragment> elements) {
+    public void addAll(List<Fragment> elements) {
         fragments.addAll(elements);
         notifyDataSetChanged();
+
+        Log.d(TAG, "cc addAll fragments.size()-1 " + (fragments.size()-1));
     }
 
     public static int getPos() {

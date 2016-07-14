@@ -14,8 +14,11 @@
         android:textColor="@color/text_color"
         android:visibility="visible"/>
 
-    <FrameLayout
-        android:id="@+id/youtube_fragment"
+    <WebView
+        android:id="@+id/wv_video"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/ph_loading"
         android:layout_width="match_parent"
-        android:layout_height="280dp" />
+        android:layout_height="match_parent">
+    </WebView>
 </LinearLayout>

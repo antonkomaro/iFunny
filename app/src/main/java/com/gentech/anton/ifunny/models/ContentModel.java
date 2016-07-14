@@ -1,22 +1,26 @@
 package com.gentech.anton.ifunny.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.gentech.anton.ifunny.utils.ContentType;
 
 /**
  * Created by anton on 12.07.16.
  */
-public class ContentModel {
+public class ContentModel implements Parcelable {
+
     private Integer id;
     private String title;
     private String url;
     private Integer viewCount;
     private Integer likeCount;
-    private ContentType contentType;
+    private Integer contentType;
 
     public ContentModel() {
     }
 
-    public ContentModel(Integer id, String title, String url, Integer viewCount, Integer likeCount, ContentType contentType) {
+    public ContentModel(Integer id, String title, String url, Integer viewCount, Integer likeCount, Integer contentType) {
         this.id = id;
         this.title = title;
         this.url = url;
@@ -25,11 +29,11 @@ public class ContentModel {
         this.contentType = contentType;
     }
 
-    public ContentType getContentType() {
+    public Integer getContentType() {
         return contentType;
     }
 
-    public void setContentType(ContentType contentType) {
+    public void setContentType(Integer contentType) {
         this.contentType = contentType;
     }
 
@@ -107,4 +111,41 @@ public class ContentModel {
                 ", contentType=" + contentType +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(title);
+        parcel.writeString(url);
+        parcel.writeInt(viewCount);
+        parcel.writeInt(likeCount);
+        parcel.writeInt(contentType);
+
+    }
+
+    protected ContentModel(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        url = in.readString();
+        viewCount = in.readInt();
+        likeCount = in.readInt();
+        contentType = in.readInt();
+    }
+
+    public static final Creator<ContentModel> CREATOR = new Creator<ContentModel>() {
+        @Override
+        public ContentModel createFromParcel(Parcel in) {
+            return new ContentModel(in);
+        }
+
+        @Override
+        public ContentModel[] newArray(int size) {
+            return new ContentModel[size];
+        }
+    };
 }

@@ -13,7 +13,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.gentech.anton.ifunny.R;
-import com.gentech.anton.ifunny.models.ContentModel;
+import com.gentech.anton.ifunny.utils.Config;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,11 +34,17 @@ public class GifFragment extends Fragment {
     public static Fragment newInstance(String contentUrl, String contentTitle) {
         GifFragment fragment = new GifFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("contentUrl", contentUrl);
-        bundle.putString("contentTitle", contentTitle);
+        bundle.putString(Config.CONTENT_URL, contentUrl);
+        bundle.putString(Config.CONTENT_TITLE, contentTitle);
         fragment.setArguments(bundle);
 
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Nullable
@@ -52,9 +58,9 @@ public class GifFragment extends Fragment {
 
 
     private void loadContent() {
-        tvContent.setText(getArguments().getString("contentTitle",""));
+        tvContent.setText(getArguments().getString(Config.CONTENT_TITLE,""));
         DraweeController controller = Fresco.newDraweeControllerBuilder()
-                .setUri(Uri.parse(getArguments().getString("contentUrl","")))
+                .setUri(Uri.parse(getArguments().getString(Config.CONTENT_URL,"")))
                 .setAutoPlayAnimations(true)
                 .build();
         ivContent.setController(controller);

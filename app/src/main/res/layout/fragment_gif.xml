@@ -16,10 +16,11 @@
         android:visibility="visible"/>
 
     <com.facebook.drawee.view.SimpleDraweeView
+        android:scaleType="fitXY"
         android:id="@+id/iv_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        fresco:placeholderImage="@drawable/ph"
+        fresco:placeholderImage="@drawable/ph_loading"
         android:visibility="visible"/>
 
 </LinearLayout>

@@ -12,6 +12,7 @@ import com.gentech.anton.ifunny.adapters.ContentAdapter;
 import com.gentech.anton.ifunny.ui.fragments.GifFragment;
 import com.gentech.anton.ifunny.ui.fragments.ImageFragment;
 import com.gentech.anton.ifunny.ui.fragments.VideoFragment;
+import com.gentech.anton.ifunny.utils.Config;
 import com.gentech.anton.ifunny.utils.ContentType;
 import com.gentech.anton.ifunny.models.ContentModel;
 import com.gentech.anton.ifunny.rest.RestService;
@@ -27,12 +28,17 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity {
+import static com.gentech.anton.ifunny.utils.ContentType.IMAGE;
+
+public class MainActivity extends AppCompatActivity  implements ViewPager.OnPageChangeListener{
     public static final String TAG = MainActivity.class.getSimpleName();
+
     private ContentAdapter contentAdapter;
 
+    private ArrayList<ContentModel> contentItems;
+
     @Bind(R.id.frame)
-    ViewPager mPager;
+    ViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +47,25 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(MainActivity.this);
 
         contentAdapter = new ContentAdapter(getSupportFragmentManager());
-        mPager.setAdapter(contentAdapter);
-        loadData();
+        pager.setAdapter(contentAdapter);
+        pager.addOnPageChangeListener(this);
+
+        if (savedInstanceState == null) {
+            loadData();
+        } else {
+            final int position = savedInstanceState.getInt(Config.POSITION, 0);
+            contentItems = savedInstanceState.getParcelableArrayList(Config.CONTENT_ITEMS);
+            updateAdapter();
+            pager.setCurrentItem(position);
+        }
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(Config.CONTENT_ITEMS, contentItems);
+        outState.putInt(Config.POSITION, contentAdapter.get);
     }
 
     private void loadData() {
@@ -63,15 +86,15 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onNext(List<BaseModel> baseModels) {
-                        updateAdapter(baseModels);
+                        contentItems = (ArrayList<ContentModel>) parseData(baseModels);
+                        updateAdapter();
                     }
                 });
     }
 
-    private void updateAdapter(List<BaseModel> baseModel) {
-        List<ContentModel> data = parseData(baseModel);
-        List<Fragment> fragments = buildFragments(data);
-        contentAdapter.add(fragments);
+    private void updateAdapter() {
+        List<Fragment> fragments = buildFragments(contentItems);
+        contentAdapter.addAll(fragments);
     }
 
     @NonNull
@@ -85,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (bm.images.isEmpty()) {
                 contentModel = new ContentModel(bm.id, bm.title, bm.img, bm.views, bm.countComment, ContentType.GIF);
             } else {
-                contentModel = new ContentModel(bm.id, bm.title, bm.images.get(0), bm.views, bm.countComment, ContentType.IMAGE);
+                contentModel = new ContentModel(bm.id, bm.title, bm.images.get(0), bm.views, bm.countComment, IMAGE);
             }
             data.add(contentModel);
         }
@@ -96,24 +119,44 @@ public class MainActivity extends AppCompatActivity {
         List<Fragment> fragments = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             Bundle b = new Bundle();
-            b.putInt("position", i);
+            b.putInt(Config.POSITION, i);
 
             Fragment fragment = null;
             ContentModel contentModel = data.get(i);
-            ContentType contentType = contentModel.getContentType();
+            int contentType = contentModel.getContentType();
             switch (contentType) {
-                case IMAGE:
+                case ContentType.IMAGE:
                     fragment = ImageFragment.newInstance(contentModel.getUrl(), contentModel.getTitle());
                     break;
-                case GIF:
+                case ContentType.GIF:
                     fragment = GifFragment.newInstance(contentModel.getUrl(), contentModel.getTitle());
                     break;
-                case VIDEO:
+                case ContentType.VIDEO:
                     fragment = VideoFragment.newInstance(contentModel.getUrl(), contentModel.getTitle());
                     break;
             }
             fragments.add(fragment);
         }
         return fragments;
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        Log.d(TAG, "onPageScrolled");
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        Log.d(TAG, "cc onPageSelected position " + position);
+        Log.d(TAG, "cc onPageSelected getCount - 1 " + ( contentAdapter.getCount() - 1));
+
+        if (position == contentAdapter.getCount() - 1) {
+            loadData();
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        Log.d(TAG, "onPageScrolled");
     }
 }
