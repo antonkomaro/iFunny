@@ -14,7 +14,7 @@ import java.util.List;
 public class ContentAdapter extends FragmentStatePagerAdapter {
     public static final String TAG = ContentAdapter.class.getSimpleName();
 
-    public static int pos = 0;
+//    private int pos = 0;
     private List<Fragment> fragments;
 
     public ContentAdapter(FragmentManager fm) {
@@ -36,15 +36,15 @@ public class ContentAdapter extends FragmentStatePagerAdapter {
         fragments.addAll(elements);
         notifyDataSetChanged();
 
-        Log.d(TAG, "cc addAll fragments.size()-1 " + (fragments.size()-1));
+        Log.d(TAG, "cc addAll fragments: " + (fragments.size()-1));
     }
 
-    public static int getPos() {
-        return pos;
-    }
-
-    public static void setPos(int pos) {
-        ContentAdapter.pos = pos;
-    }
+//    public int getPos() {
+//        return pos;
+//    }
+//
+//    public void setPos(int pos) {
+//        this.pos = pos;
+//    }
 
 }

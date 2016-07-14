@@ -48,15 +48,15 @@ public class MainActivity extends AppCompatActivity  implements ViewPager.OnPage
 
         contentAdapter = new ContentAdapter(getSupportFragmentManager());
         pager.setAdapter(contentAdapter);
+        pager.setOffscreenPageLimit(0);
         pager.addOnPageChangeListener(this);
 
         if (savedInstanceState == null) {
             loadData();
         } else {
-            final int position = savedInstanceState.getInt(Config.POSITION, 0);
             contentItems = savedInstanceState.getParcelableArrayList(Config.CONTENT_ITEMS);
             updateAdapter();
-            pager.setCurrentItem(position);
+//            pager.setCurrentItem(contentAdapter.getPos());
         }
 
     }
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity  implements ViewPager.OnPage
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(Config.CONTENT_ITEMS, contentItems);
-        outState.putInt(Config.POSITION, contentAdapter.get);
+//        outState.putInt(Config.POSITION,  contentAdapter.getPos());
     }
 
     private void loadData() {
@@ -147,8 +147,12 @@ public class MainActivity extends AppCompatActivity  implements ViewPager.OnPage
 
     @Override
     public void onPageSelected(int position) {
-        Log.d(TAG, "cc onPageSelected position " + position);
-        Log.d(TAG, "cc onPageSelected getCount - 1 " + ( contentAdapter.getCount() - 1));
+//        this.pos = position;
+
+//        contentAdapter.setPos(position);
+
+//        Log.d(TAG, "cc turn page position: " +  contentAdapter.getPos());
+//        Log.d(TAG, "cc turn page fragments: " + (contentAdapter.getCount() - 1));
 
         if (position == contentAdapter.getCount() - 1) {
             loadData();
