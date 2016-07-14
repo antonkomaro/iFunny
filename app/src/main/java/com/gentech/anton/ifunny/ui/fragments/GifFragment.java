@@ -13,6 +13,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.gentech.anton.ifunny.R;
+import com.gentech.anton.ifunny.models.ContentModel;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,34 +23,33 @@ import butterknife.ButterKnife;
  */
 
 public class GifFragment extends Fragment {
-    public static final String TAG = VideoFragment.class.getSimpleName();
-
-    @Bind(R.id.iv_content)
-    SimpleDraweeView ivContent;
+    public static final String TAG = GifFragment.class.getSimpleName();
 
     @Bind(R.id.tv_content)
     TextView tvContent;
 
-    public static GifFragment newInstance(String contentUrl, String contentTitle) {
+    @Bind(R.id.iv_content)
+    SimpleDraweeView ivContent;
 
-        GifFragment gifFragment = new GifFragment();
-
+    public static Fragment newInstance(String contentUrl, String contentTitle) {
+        GifFragment fragment = new GifFragment();
         Bundle bundle = new Bundle();
         bundle.putString("contentUrl", contentUrl);
         bundle.putString("contentTitle", contentTitle);
+        fragment.setArguments(bundle);
 
-        gifFragment.setArguments(bundle);
-        return gifFragment;
+        return fragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_image, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_gif, container, false);
         ButterKnife.bind(this, rootView);
         loadContent();
         return rootView;
     }
+
 
     private void loadContent() {
         tvContent.setText(getArguments().getString("contentTitle",""));
@@ -59,4 +59,7 @@ public class GifFragment extends Fragment {
                 .build();
         ivContent.setController(controller);
     }
+
+
+
 }

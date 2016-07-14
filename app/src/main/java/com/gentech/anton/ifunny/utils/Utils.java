@@ -1,6 +1,7 @@
 package com.gentech.anton.ifunny.utils;
 
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,20 +16,10 @@ import java.util.regex.Pattern;
 public class Utils {
 
     public static String getYoutubeVideoIdFromUrl(String url) {
-//        Pattern compiledPattern = Pattern.compile(Constants.YOUTUBE_PATTERN);
-//        Matcher matcher = compiledPattern.matcher(url);
-//        if (matcher.find()) {
-//            return matcher.group();
-//        }
-//        return "-1";
-        URL youtubeURL = null;
-        try {
-            youtubeURL = new URL(url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        if (youtubeURL != null) {
-            return youtubeURL.getQuery();
+        Pattern compiledPattern = Pattern.compile(Constants.YOUTUBE_PATTERN);
+        Matcher matcher = compiledPattern.matcher(url);
+        if (matcher.find()) {
+            return matcher.group();
         }
         return "-1";
     }

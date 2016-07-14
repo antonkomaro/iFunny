@@ -21,22 +21,20 @@ import butterknife.ButterKnife;
 public class ImageFragment extends Fragment {
     public static final String TAG = VideoFragment.class.getSimpleName();
 
-    @Bind(R.id.iv_content)
-    SimpleDraweeView ivContent;
-
     @Bind(R.id.tv_content)
     TextView tvContent;
 
-    public static ImageFragment newInstance(String contentUrl, String contentTitle) {
+    @Bind(R.id.iv_content)
+    SimpleDraweeView ivContent;
 
-        ImageFragment imageFragment = new ImageFragment();
-
+    public static Fragment newInstance(String contentUrl, String contentTitle) {
+        ImageFragment fragment = new ImageFragment();
         Bundle bundle = new Bundle();
         bundle.putString("contentUrl", contentUrl);
         bundle.putString("contentTitle", contentTitle);
+        fragment.setArguments(bundle);
 
-        imageFragment.setArguments(bundle);
-        return imageFragment;
+        return fragment;
     }
 
     @Nullable
@@ -47,8 +45,7 @@ public class ImageFragment extends Fragment {
         loadContent();
         return rootView;
     }
-
-    private void loadContent() {
+    protected void loadContent() {
         ivContent.setImageURI(Uri.parse(getArguments().getString("contentUrl","")));
         tvContent.setText(getArguments().getString("contentTitle",""));
     }

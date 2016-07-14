@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         for (BaseModel bm : baseModel) {
             Log.d(TAG, bm.toString());
             if (!bm.videos.isEmpty()) {
-                contentModel = new ContentModel(bm.id, bm.title, bm.url, bm.views, bm.countComment, ContentType.VIDEO);
+                contentModel = new ContentModel(bm.id, bm.title, (String) bm.videos.get(0), bm.views, bm.countComment, ContentType.VIDEO);
             } else if (bm.images.isEmpty()) {
                 contentModel = new ContentModel(bm.id, bm.title, bm.img, bm.views, bm.countComment, ContentType.GIF);
             } else {
@@ -98,10 +98,6 @@ public class MainActivity extends AppCompatActivity {
             Bundle b = new Bundle();
             b.putInt("position", i);
 
-//            Fragment f = defineFragment(data.get(i));
-//            if (f == null) {
-//                return null;
-//            }
             Fragment fragment = null;
             ContentModel contentModel = data.get(i);
             ContentType contentType = contentModel.getContentType();
@@ -116,44 +112,8 @@ public class MainActivity extends AppCompatActivity {
                     fragment = VideoFragment.newInstance(contentModel.getUrl(), contentModel.getTitle());
                     break;
             }
-
-//            Fragment fragment = Fragment.instantiate(this, fragmentName, b);
-
             fragments.add(fragment);
         }
         return fragments;
     }
-
-//    private Fragment defineFragment(ContentModel content) {
-//        if (content == null) {
-//            Log.e(TAG, getString(R.string.no_content_found));
-//            return null;
-//        }
-//
-//        switch (content.getContentType()) {
-//            case IMAGE:
-//                return createImageFragment(content);
-//            case GIF:
-//                return createGifFragment(content);
-//            case VIDEO:
-//                return createVideoFragment(content);
-//            default:
-//                Log.e(TAG, getString(R.string.unknown_content_type));
-//                return null;
-//        }
-//    }
-
-//    private Fragment createGifFragment(ContentModel content) {
-//        return GifFragment.newInstance(content.getUrl(), content.getTitle());
-//    }
-//
-//    private Fragment createVideoFragment(ContentModel content) {
-//        return VideoFragment.newInstance(content.getUrl(), content.getTitle());
-//    }
-//
-//    private Fragment createImageFragment(ContentModel content) {
-//        return ImageFragment
-//                .newInstance(content.getUrl(), content.getTitle());
-//    }
-
 }
