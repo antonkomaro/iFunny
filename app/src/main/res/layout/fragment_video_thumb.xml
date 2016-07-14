@@ -8,21 +8,16 @@
         android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:text="@string/app_name"
-        android:textColor="@color/text_color"
+        android:gravity="center_horizontal"
         android:textSize="18sp"
-        android:visibility="visible" />
+        android:textColor="@color/text_color"
+        android:visibility="visible"/>
 
-    <FrameLayout
-        android:id="@+id/youtube_fragment"
+    <com.google.android.youtube.player.YouTubeThumbnailView
+        android:id="@+id/youtube_thumb"
         android:layout_width="match_parent"
-        android:layout_height="280dp">
+        android:layout_height="280dp"
+        xmlns:android="http://schemas.android.com/apk/res/android" />
 
-        <!--<com.google.android.youtube.player.YouTubeThumbnailView-->
-            <!--android:id="@+id/youtube_thumb"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="280dp" />-->
-
-    </FrameLayout>
 </LinearLayout>

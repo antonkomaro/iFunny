@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
  * Created by anton on 13.07.16.
  */
 public class ImageFragment extends Fragment {
-    public static final String TAG = VideoFragment.class.getSimpleName();
+    public static final String TAG = ImageFragment.class.getSimpleName();
 
     @Bind(R.id.tv_content)
     TextView tvContent;

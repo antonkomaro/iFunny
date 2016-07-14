@@ -11,7 +11,7 @@ import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.adapters.ContentAdapter;
 import com.gentech.anton.ifunny.ui.fragments.GifFragment;
 import com.gentech.anton.ifunny.ui.fragments.ImageFragment;
-import com.gentech.anton.ifunny.ui.fragments.VideoFragment;
+import com.gentech.anton.ifunny.ui.fragments.VideoThumbFragment;
 import com.gentech.anton.ifunny.utils.ContentType;
 import com.gentech.anton.ifunny.models.ContentModel;
 import com.gentech.anton.ifunny.rest.RestService;
@@ -42,6 +42,26 @@ public class MainActivity extends AppCompatActivity {
 
         contentAdapter = new ContentAdapter(getSupportFragmentManager());
         mPager.setAdapter(contentAdapter);
+//        mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                Fragment fragment = contentAdapter.getItem(position);
+//                Log.d(TAG, "fragment instanceof VideoFragment " + (fragment instanceof VideoFragment));
+//                if (fragment instanceof VideoFragment) {
+//                    ((VideoFragment) fragment).playVideo();
+//                }
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
         loadData();
     }
 
@@ -109,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     fragment = GifFragment.newInstance(contentModel.getUrl(), contentModel.getTitle());
                     break;
                 case VIDEO:
-                    fragment = VideoFragment.newInstance(contentModel.getUrl(), contentModel.getTitle());
+                    fragment = VideoThumbFragment.newInstance(contentModel.getUrl(), contentModel.getTitle());
                     break;
             }
             fragments.add(fragment);

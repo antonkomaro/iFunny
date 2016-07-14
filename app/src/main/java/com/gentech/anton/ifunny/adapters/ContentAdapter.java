@@ -7,13 +7,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.models.ContentModel;
 import com.gentech.anton.ifunny.ui.activities.MainActivity;
 import com.gentech.anton.ifunny.ui.fragments.GifFragment;
 import com.gentech.anton.ifunny.ui.fragments.ImageFragment;
-import com.gentech.anton.ifunny.ui.fragments.VideoFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,6 +46,13 @@ public class ContentAdapter extends FragmentStatePagerAdapter {
     public void add(List<Fragment> elements) {
         fragments.addAll(elements);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        Object value =  super.instantiateItem(container, position);
+
+        return value;
     }
 
     public static int getPos() {
