@@ -48,14 +48,15 @@
         android:orientation="horizontal"
         android:id="@+id/linearLayout">
 
-        <ImageView
-            android:id="@+id/iv_like"
+        <ImageButton
+            android:id="@+id/btn_like"
             android:src="@drawable/ic_like"
             android:layout_weight="2"
             android:clickable="true"
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="@null"
             android:contentDescription="@string/like" />
 
         <TextView
@@ -68,14 +69,15 @@
             android:textColor="@color/primary"
             android:visibility="visible"/>
 
-        <ImageView
+        <ImageButton
             android:layout_weight="2"
-            android:id="@+id/iv_share"
+            android:id="@+id/btn_share"
             android:src="@drawable/ic_share"
             android:clickable="true"
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="@null"
             android:contentDescription="@string/like" />
 
     </LinearLayout>

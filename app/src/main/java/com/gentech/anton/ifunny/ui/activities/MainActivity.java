@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         adapter = new ContentAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
-        pager.setOffscreenPageLimit(1);
+        pager.setOffscreenPageLimit(3);
         pager.addOnPageChangeListener(this);
 
         if (bundle == null) {
