@@ -20,12 +20,13 @@ public class ContentModel implements Parcelable {
     public ContentModel() {
     }
 
-    public ContentModel(Integer id, String title, String url, Integer viewCount, Integer likeCount, Integer contentType) {
+    public ContentModel(Integer id, String title, String url,
+                        Integer viewCount, Integer likeCount, Integer contentType) {
         this.id = id;
         this.title = title;
         this.url = url;
-        this.viewCount = viewCount;
-        this.likeCount = likeCount;
+        this.viewCount = viewCount == null ? Integer.valueOf(0) : viewCount;
+        this.likeCount = likeCount == null ? Integer.valueOf(0) : likeCount;
         this.contentType = contentType;
     }
 
@@ -87,7 +88,9 @@ public class ContentModel implements Parcelable {
         if (!id.equals(that.id)) return false;
         if (!title.equals(that.title)) return false;
         if (!url.equals(that.url)) return false;
-        return contentType == that.contentType;
+        if (!viewCount.equals(that.viewCount)) return false;
+        if (!likeCount.equals(that.likeCount)) return false;
+        return contentType.equals(that.contentType);
 
     }
 
@@ -96,6 +99,8 @@ public class ContentModel implements Parcelable {
         int result = id.hashCode();
         result = 31 * result + title.hashCode();
         result = 31 * result + url.hashCode();
+        result = 31 * result + viewCount.hashCode();
+        result = 31 * result + likeCount.hashCode();
         result = 31 * result + contentType.hashCode();
         return result;
     }

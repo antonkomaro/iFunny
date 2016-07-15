@@ -15,6 +15,7 @@ import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.gentech.anton.ifunny.R;
+import com.gentech.anton.ifunny.ui.activities.MainActivity;
 import com.gentech.anton.ifunny.utils.Config;
 import com.gentech.anton.ifunny.utils.Utils;
 
@@ -33,11 +34,13 @@ public class VideoFragment extends Fragment {
     @Bind(R.id.wv_video)
     WebView wvVideo;
 
-    public static VideoFragment newInstance(String contentUrl, String contentTitle) {
+    // TODO: 15.07.16 Put logic into parent common fragment
+    public static VideoFragment newInstance(String contentUrl, String contentTitle, int contentLikes) {
         VideoFragment videoFragment = new VideoFragment();
         Bundle bundle = new Bundle();
         bundle.putString(Config.CONTENT_URL, contentUrl);
         bundle.putString(Config.CONTENT_TITLE, contentTitle);
+        bundle.putInt(Config.CONTENT_LIKES, contentLikes);
         videoFragment.setArguments(bundle);
 
         return videoFragment;
@@ -71,7 +74,8 @@ public class VideoFragment extends Fragment {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void loadContent() {
-        tvContent.setText(getArguments().getString(Config.CONTENT_TITLE,""));
+
+        tvContent.setText(getArguments().getString(Config.CONTENT_TITLE, ""));
 
         final String contentUrl = getArguments().getString(Config.CONTENT_URL, "");
         wvVideo.getSettings().setJavaScriptEnabled(true);
@@ -85,6 +89,10 @@ public class VideoFragment extends Fragment {
                 + "</iframe>\n";
         wvVideo.setWebChromeClient(new WebChromeClient());
         wvVideo.loadDataWithBaseURL("", html, mimeType, encoding, "");
+
+        ((MainActivity) getActivity()).updateLikes(getArguments().getInt(Config.CONTENT_LIKES, 0));
+        ((MainActivity) getActivity()).setupShare(contentUrl);
+        ((MainActivity) getActivity()).setupLike(contentUrl);
     }
 
 

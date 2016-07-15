@@ -1,5 +1,7 @@
 package com.gentech.anton.ifunny.ui.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -7,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.adapters.ContentAdapter;
@@ -44,9 +49,15 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
+    @Bind(R.id.tv_likes)
+    TextView tvLikes;
+
+    @Bind(R.id.btn_share)
+    ImageButton btnShare;
+
+
     @Override
     protected void onCreate(Bundle bundle) {
-        Log.d(TAG, "cc onCreate");
         super.onCreate(bundle);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(MainActivity.this);
@@ -61,13 +72,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         pager.setOffscreenPageLimit(3);
         pager.addOnPageChangeListener(this);
 
-        if (bundle == null) {
+        if (bundle == null || contentItems == null) {
             loadData();
         } else {
             contentItems = bundle.getParcelableArrayList(Config.CONTENT_ITEMS);
-            if (contentItems != null && !contentItems.isEmpty()) {
-               updateAdapter();
-            }
+            updateAdapter();
         }
 
     }
@@ -76,14 +85,17 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
         Log.d(TAG, "cc onSaveInstanceState contentItems " + contentItems);
-        if (contentItems!=null && !contentItems.isEmpty()) {
+        if (contentItems != null && !contentItems.isEmpty()) {
             bundle.putParcelableArrayList(Config.CONTENT_ITEMS, contentItems);
         }
     }
 
     private void updateAdapter() {
+        Log.d(TAG, "cc updateAdapter");
         if (contentItems != null && !contentItems.isEmpty()) {
+            Log.d(TAG, "cc updateAdapter in if");
             List<Fragment> fragments = buildFragments(contentItems);
+            Log.d(TAG, "cc updateAdapter in if fragments " + fragments);
             adapter.addAll(fragments);
         }
     }
@@ -115,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     public void onNext(List<BaseModel> baseModels) {
                         if (baseModels != null && !baseModels.isEmpty()) {
                             contentItems = (ArrayList<ContentModel>) parseData(baseModels);
+                            Log.d(TAG, "cc onNext contentItems " + contentItems.size());
                             updateAdapter();
                         }
                     }
@@ -145,19 +158,21 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             Bundle b = new Bundle();
             b.putInt(Config.POSITION, i);
 
-            Fragment fragment = null;
+            Fragment fragment;
             ContentModel contentModel = data.get(i);
             int contentType = contentModel.getContentType();
             switch (contentType) {
                 case ContentType.IMAGE:
-                    fragment = ImageFragment.newInstance(contentModel.getUrl(), contentModel.getTitle());
+                    fragment = ImageFragment.newInstance(contentModel.getUrl(), contentModel.getTitle(), contentModel.getLikeCount());
                     break;
                 case ContentType.GIF:
-                    fragment = GifFragment.newInstance(contentModel.getUrl(), contentModel.getTitle());
+                    fragment = GifFragment.newInstance(contentModel.getUrl(), contentModel.getTitle(), contentModel.getLikeCount());
                     break;
                 case ContentType.VIDEO:
-                    fragment = VideoFragment.newInstance(contentModel.getUrl(), contentModel.getTitle());
+                    fragment = VideoFragment.newInstance(contentModel.getUrl(), contentModel.getTitle(), contentModel.getLikeCount());
                     break;
+                default:
+                    return null;
             }
             fragments.add(fragment);
         }
@@ -176,12 +191,49 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void onPageSelected(int position) {
-//        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-//        position = adapter.getItemPosition(currentFragment);
         if (position == adapter.getCount() - 1) {
             loadData();
         }
     }
 
+    public void updateLikes(int likes) {
+        tvLikes.setText(String.valueOf(likes));
+    }
 
+    public void setupShare(String contentUrl) {
+        btnShare.setOnClickListener(view -> {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, contentUrl);
+            sendIntent.setType("text/plain");
+            startActivity(Intent.createChooser(sendIntent,
+                    getResources().getText(R.string.send_to)));
+        });
+    }
+
+    public void setupLike(String contentUrl) {
+        final String[] regToken = new String[1];
+        ServiceFactory.createRestService(RestService.class, RestService.SERVICE_ENDPOINT)
+                .getAccessToken()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "getAccessToken:onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String accessToken) {
+                        regToken[0] = accessToken;
+                    }
+                });
+
+
+    }
 }

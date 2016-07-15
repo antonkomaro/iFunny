@@ -12,6 +12,7 @@ public interface Config {
 
     String CONTENT_TITLE = "contentTitle";
     String CONTENT_URL = "contentUrl";
+    String CONTENT_LIKES = "contentLikes";
 
     int OFFSET = 0;
     int LIMIT = 10;

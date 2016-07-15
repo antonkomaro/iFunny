@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by anton on 12.07.16.
  */
-public class ContentAdapter extends FragmentPagerAdapter {
+public class ContentAdapter extends FragmentStatePagerAdapter {
     public static final String TAG = ContentAdapter.class.getSimpleName();
     private List<Fragment> fragments;
 
@@ -32,10 +32,10 @@ public class ContentAdapter extends FragmentPagerAdapter {
     }
 
     public void addAll(List<Fragment> elements) {
-//        Log.d(TAG, "cc elements " + elements);
+        Log.d(TAG, "cc elements " + elements);
         fragments.addAll(elements);
         notifyDataSetChanged();
-//        Log.d(TAG, "cc addAll fragments size: " + (fragments.size()));
+        Log.d(TAG, "cc addAll fragments size: " + (fragments.size()));
     }
 
 }

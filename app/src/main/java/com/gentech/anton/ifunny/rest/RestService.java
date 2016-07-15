@@ -5,6 +5,7 @@ import com.gentech.anton.ifunny.rest.model.BaseModel;
 import java.util.List;
 
 import retrofit.http.GET;
+import retrofit.http.POST;
 import retrofit.http.Path;
 import retrofit.http.Query;
 import rx.Observable;
@@ -18,5 +19,11 @@ public interface RestService {
 
     @GET("posts/8")
     Observable<List<BaseModel>> loadData(@Query("offset") int offset, @Query("limit") int limit);
+
+    @GET("registration")
+    Observable<String> getAccessToken();
+
+    @POST("comment/add")
+    void postLike(@Query("access-token") String accessToken);
 }
 

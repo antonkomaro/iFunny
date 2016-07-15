@@ -14,6 +14,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.gentech.anton.ifunny.R;
+import com.gentech.anton.ifunny.ui.activities.MainActivity;
 import com.gentech.anton.ifunny.utils.Config;
 
 import butterknife.Bind;
@@ -32,11 +33,12 @@ public class GifFragment extends Fragment {
     @Bind(R.id.iv_content)
     SimpleDraweeView ivContent;
 
-    public static Fragment newInstance(String contentUrl, String contentTitle) {
+    public static Fragment newInstance(String contentUrl, String contentTitle, int contentLikes) {
         GifFragment fragment = new GifFragment();
         Bundle bundle = new Bundle();
         bundle.putString(Config.CONTENT_URL, contentUrl);
         bundle.putString(Config.CONTENT_TITLE, contentTitle);
+        bundle.putInt(Config.CONTENT_LIKES, contentLikes);
         fragment.setArguments(bundle);
 
         return fragment;
@@ -57,7 +59,6 @@ public class GifFragment extends Fragment {
         return rootView;
     }
 
-
     private void loadContent() {
         tvContent.setText(getArguments().getString(Config.CONTENT_TITLE,""));
         DraweeController controller = Fresco.newDraweeControllerBuilder()
@@ -65,6 +66,9 @@ public class GifFragment extends Fragment {
                 .setAutoPlayAnimations(true)
                 .build();
         ivContent.setController(controller);
+
+        ((MainActivity)getActivity()).updateLikes(getArguments().getInt(Config.CONTENT_LIKES,0));
+        ((MainActivity) getActivity()).setupShare(getArguments().getString(Config.CONTENT_URL,""));
     }
 
 

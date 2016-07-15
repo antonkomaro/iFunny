@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.gentech.anton.ifunny.R;
+import com.gentech.anton.ifunny.ui.activities.MainActivity;
 import com.gentech.anton.ifunny.utils.Config;
 
 import butterknife.Bind;
@@ -29,11 +30,12 @@ public class ImageFragment extends Fragment {
     @Bind(R.id.iv_content)
     SimpleDraweeView ivContent;
 
-    public static Fragment newInstance(String contentUrl, String contentTitle) {
+    public static Fragment newInstance(String contentUrl, String contentTitle, int contentLikes) {
         ImageFragment fragment = new ImageFragment();
         Bundle bundle = new Bundle();
         bundle.putString(Config.CONTENT_URL, contentUrl);
         bundle.putString(Config.CONTENT_TITLE, contentTitle);
+        bundle.putInt(Config.CONTENT_LIKES, contentLikes);
         fragment.setArguments(bundle);
 
         return fragment;
@@ -53,8 +55,12 @@ public class ImageFragment extends Fragment {
         loadContent();
         return rootView;
     }
-    protected void loadContent() {
+
+    private void loadContent() {
         ivContent.setImageURI(Uri.parse(getArguments().getString(Config.CONTENT_URL,"")));
         tvContent.setText(getArguments().getString(Config.CONTENT_TITLE,""));
+
+        ((MainActivity)getActivity()).updateLikes(getArguments().getInt(Config.CONTENT_LIKES,0));
+        ((MainActivity) getActivity()).setupShare(getArguments().getString(Config.CONTENT_URL,""));
     }
 }
