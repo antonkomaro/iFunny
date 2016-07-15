@@ -5,6 +5,8 @@ import com.gentech.anton.ifunny.rest.model.BaseModel;
 import java.util.List;
 
 import retrofit.http.GET;
+import retrofit.http.Path;
+import retrofit.http.Query;
 import rx.Observable;
 
 
@@ -14,7 +16,7 @@ import rx.Observable;
 public interface RestService {
     String SERVICE_ENDPOINT = "http://api.demo-stage.info/";
 
-    @GET("posts?portal=8")
-    Observable<List<BaseModel>> loadData();
+    @GET("posts/8")
+    Observable<List<BaseModel>> loadData(@Query("offset") int offset, @Query("limit") int limit);
 }
 

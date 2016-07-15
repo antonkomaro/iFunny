@@ -1,6 +1,8 @@
 package com.gentech.anton.ifunny.ui.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -51,29 +53,21 @@ public class VideoFragment extends Fragment {
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View rootView = layoutInflater.inflate(R.layout.fragment_video, viewGroup, false);
         ButterKnife.bind(this, rootView);
-        loadContent();
         return rootView;
     }
 
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//
-//        try {
-//            Class.forName("android.webkit.WebView")
-//                    .getMethod("onPause", (Class[]) null)
-//                    .invoke(wvVideo, (Object[]) null);
-//
-//        } catch(ClassNotFoundException cnfe) {
-//            Log.e(TAG, cnfe.getLocalizedMessage());
-//        } catch(NoSuchMethodException nsme) {
-//            Log.e(TAG, nsme.getLocalizedMessage());
-//        } catch(InvocationTargetException ite) {
-//            Log.e(TAG, ite.getLocalizedMessage());
-//        } catch (IllegalAccessException iae) {
-//            Log.e(TAG, iae.getLocalizedMessage());
-//        }
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        loadContent();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        wvVideo.onPause();
+        wvVideo.clearCache(false);
+    }
 
     @SuppressLint("SetJavaScriptEnabled")
     private void loadContent() {
@@ -90,7 +84,6 @@ public class VideoFragment extends Fragment {
                 + "?fs=0\" frameborder=\"0\">\n"
                 + "</iframe>\n";
         wvVideo.setWebChromeClient(new WebChromeClient());
-        wvVideo.loadDataWithBaseURL("", html, mimeType, encoding, "");
         wvVideo.loadDataWithBaseURL("", html, mimeType, encoding, "");
     }
 

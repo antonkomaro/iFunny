@@ -1,24 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#02171a</color>
-    <color name="colorPrimaryDark">#010d0e</color>
-    <color name="colorAccent">#4FB1BD</color>
-    <color name="item_feed_bg">#FFFFFF</color>
-    <color name="grey_bg">#F4F2F2</color>
-    <color name="grey_bg_night">#0C141C</color>
-    <color name="text_color">#000000</color>
-    <color name="text_color_pale_grey">#969696</color>
-    <color name="pale_grey_divider">#bababa</color>
-    <color name="fb_blue">#23599B</color>
-    <color name="black_semi_transparent_mask">#93000000</color>
-
-    <color name="caretka_color">#02171a</color>
-
-    <color name="progressbar_color_start">@color/colorPrimary</color>
-    <color name="progressbar_color_end">#003b2e29</color>
-
-    <color name="guide_title">#282828</color>
-    <color name="guide_body">#727272</color>
-    <color name="guide_done">#383838</color>
+    <color name="primary">#FFC107</color>
+    <color name="primary_dark">#FFA000</color>
+    <color name="primary_light">#FFECB3</color>
+    <color name="accent">#4CAF50</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="icons">#212121</color>
+    <color name="divider">#B6B6B6</color>
 </resources>
 

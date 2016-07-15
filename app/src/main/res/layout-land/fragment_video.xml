@@ -2,17 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <include layout="@layout/item_title"/>
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/iv_content"
-        android:scaleType="fitCenter"
+    <WebView
+        android:id="@+id/wv_video"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/ph_loading"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        fresco:placeholderImage="@drawable/ph_loading"
-        android:visibility="visible"/>
-
+        android:layout_height="280dp">
+    </WebView>
 </LinearLayout>

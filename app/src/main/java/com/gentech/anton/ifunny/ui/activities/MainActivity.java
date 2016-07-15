@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.gentech.anton.ifunny.R;
@@ -30,47 +31,65 @@ import rx.schedulers.Schedulers;
 
 import static com.gentech.anton.ifunny.utils.ContentType.IMAGE;
 
-public class MainActivity extends AppCompatActivity  implements ViewPager.OnPageChangeListener{
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    private ContentAdapter contentAdapter;
+    private ContentAdapter adapter;
 
     private ArrayList<ContentModel> contentItems;
 
-    @Bind(R.id.frame)
+    @Bind(R.id.viewpager)
     ViewPager pager;
 
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle bundle) {
+        Log.d(TAG, "cc onCreate");
+        super.onCreate(bundle);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(MainActivity.this);
 
-        contentAdapter = new ContentAdapter(getSupportFragmentManager());
-        pager.setAdapter(contentAdapter);
-        pager.setOffscreenPageLimit(0);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle("");
+
+        adapter = new ContentAdapter(getSupportFragmentManager());
+        pager.setAdapter(adapter);
+        pager.setOffscreenPageLimit(1);
         pager.addOnPageChangeListener(this);
 
-        if (savedInstanceState == null) {
+        if (bundle == null) {
             loadData();
         } else {
-            contentItems = savedInstanceState.getParcelableArrayList(Config.CONTENT_ITEMS);
-            updateAdapter();
-//            pager.setCurrentItem(contentAdapter.getPos());
+            contentItems = bundle.getParcelableArrayList(Config.CONTENT_ITEMS);
+            if (contentItems != null && !contentItems.isEmpty()) {
+               updateAdapter();
+            }
         }
 
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(Config.CONTENT_ITEMS, contentItems);
-//        outState.putInt(Config.POSITION,  contentAdapter.getPos());
+    protected void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+        Log.d(TAG, "cc onSaveInstanceState contentItems " + contentItems);
+        if (contentItems!=null && !contentItems.isEmpty()) {
+            bundle.putParcelableArrayList(Config.CONTENT_ITEMS, contentItems);
+        }
     }
 
     private void loadData() {
         RestService service = ServiceFactory.createRestService(RestService.class, RestService.SERVICE_ENDPOINT);
-        service.loadData()
+        int limit = Config.LIMIT;
+        int itemsCount = adapter.getCount();
+        int offset = itemsCount == 0 ? Config.OFFSET : itemsCount;
+        Log.d(TAG, "cc loadData itemsCount " + itemsCount);
+        Log.d(TAG, "cc loadData offset " + offset);
+        Log.d(TAG, "cc loadData limit " + limit);
+        service.loadData(offset, limit)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<BaseModel>>() {
@@ -86,15 +105,19 @@ public class MainActivity extends AppCompatActivity  implements ViewPager.OnPage
 
                     @Override
                     public void onNext(List<BaseModel> baseModels) {
-                        contentItems = (ArrayList<ContentModel>) parseData(baseModels);
-                        updateAdapter();
+                        if (baseModels != null && !baseModels.isEmpty()) {
+                            contentItems = (ArrayList<ContentModel>) parseData(baseModels);
+                            updateAdapter();
+                        }
                     }
                 });
     }
 
     private void updateAdapter() {
-        List<Fragment> fragments = buildFragments(contentItems);
-        contentAdapter.addAll(fragments);
+        if (contentItems != null && !contentItems.isEmpty()) {
+            List<Fragment> fragments = buildFragments(contentItems);
+            adapter.addAll(fragments);
+        }
     }
 
     @NonNull
@@ -142,25 +165,22 @@ public class MainActivity extends AppCompatActivity  implements ViewPager.OnPage
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        Log.d(TAG, "onPageScrolled");
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-//        this.pos = position;
-
-//        contentAdapter.setPos(position);
-
-//        Log.d(TAG, "cc turn page position: " +  contentAdapter.getPos());
-//        Log.d(TAG, "cc turn page fragments: " + (contentAdapter.getCount() - 1));
-
-        if (position == contentAdapter.getCount() - 1) {
-            loadData();
-        }
+        //do nothing
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
         Log.d(TAG, "onPageScrolled");
     }
+
+    @Override
+    public void onPageSelected(int position) {
+//        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+//        position = adapter.getItemPosition(currentFragment);
+        if (position == adapter.getCount() - 1) {
+            loadData();
+        }
+    }
+
+
 }
