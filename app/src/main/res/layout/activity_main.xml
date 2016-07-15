@@ -1,19 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_activity_main_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/primary_text"
     tools:context=".ui.activities.MainActivity">
 
-    <include layout="@layout/toolbar" />
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary">
+        <RelativeLayout
+            android:id="@+id/toolbar_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/ic_logo_header"
+            android:clickable="true"/>
+    </android.support.v7.widget.Toolbar>
 
     <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/color_dark"
+        android:layout_above="@+id/linearLayout">
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/fragment_container"
@@ -22,4 +39,45 @@
         </FrameLayout>
     </android.support.v4.view.ViewPager>
 
-</LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:background="@color/primary_text"
+        android:orientation="horizontal"
+        android:id="@+id/linearLayout">
+
+        <ImageView
+            android:id="@+id/iv_like"
+            android:src="@drawable/ic_like"
+            android:layout_weight="2"
+            android:clickable="true"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/like" />
+
+        <TextView
+            android:id="@+id/tv_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            tools:text="14335"
+            android:gravity="center"
+            android:textColor="@color/primary"
+            android:visibility="visible"/>
+
+        <ImageView
+            android:layout_weight="2"
+            android:id="@+id/iv_share"
+            android:src="@drawable/ic_share"
+            android:clickable="true"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/like" />
+
+    </LinearLayout>
+
+</RelativeLayout>

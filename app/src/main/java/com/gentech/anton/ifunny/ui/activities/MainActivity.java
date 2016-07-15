@@ -81,6 +81,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         }
     }
 
+    private void updateAdapter() {
+        if (contentItems != null && !contentItems.isEmpty()) {
+            List<Fragment> fragments = buildFragments(contentItems);
+            adapter.addAll(fragments);
+        }
+    }
+
+    // TODO: 15.07.16 Put this logic to presenter
     private void loadData() {
         RestService service = ServiceFactory.createRestService(RestService.class, RestService.SERVICE_ENDPOINT);
         int limit = Config.LIMIT;
@@ -111,13 +119,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                         }
                     }
                 });
-    }
-
-    private void updateAdapter() {
-        if (contentItems != null && !contentItems.isEmpty()) {
-            List<Fragment> fragments = buildFragments(contentItems);
-            adapter.addAll(fragments);
-        }
     }
 
     @NonNull

@@ -3,9 +3,9 @@
     android:id="@+id/tv_content"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:background="@color/primary_text"
+    android:background="@color/color_dark"
     android:gravity="center"
     android:text="@string/app_name"
-    android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+    android:textAppearance="@style/TextAppearance.AppCompat.Title"
     android:textColor="@color/divider"
     android:visibility="visible" />
