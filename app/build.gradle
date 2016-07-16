@@ -41,4 +41,8 @@ dependencies {
     compile 'com.facebook.fresco:animated-base-support:0.11.0'
     compile 'com.facebook.fresco:animated-gif:0.11.0'
     compile files('libs/YouTubeAndroidPlayerApi.jar')
+    compile 'com.google.firebase:firebase-ads:9.2.0'
+    compile 'com.facebook.android:audience-network-sdk:4.11.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

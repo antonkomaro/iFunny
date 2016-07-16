@@ -16,6 +16,7 @@ import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.adapters.ContentAdapter;
 import com.gentech.anton.ifunny.models.Content;
 import com.gentech.anton.ifunny.rest.model.TokenModel;
+import com.gentech.anton.ifunny.ui.fragments.AdFragment;
 import com.gentech.anton.ifunny.ui.fragments.GifFragment;
 import com.gentech.anton.ifunny.ui.fragments.ImageFragment;
 import com.gentech.anton.ifunny.ui.fragments.VideoFragment;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private RestService service;
     private String regToken;
+
     private ContentAdapter adapter;
     private ArrayList<Content> contentItems;
 
@@ -157,8 +159,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private List<Fragment> buildFragments(List<Content> data) {
         List<Fragment> fragments = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
-            Bundle b = new Bundle();
-            b.putInt(Config.POSITION, i);
+
+            if (i % Config.AD_FREQUENCY == 0) {
+                Fragment fragment = new AdFragment();
+                fragments.add(fragment);
+            }
 
             Fragment fragment;
             Content content = data.get(i);
@@ -226,7 +231,15 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe(likeAddModel -> {
 //                    Log.d(TAG, "likeAddModel " + likeAddModel);
+        incrementLikes();
 //                });
+
+    }
+
+    private void incrementLikes() {
+        int currentLikes = (Integer.parseInt(tvLikes.getText().toString()));
+        currentLikes++;
+        tvLikes.setText(String.valueOf(currentLikes));
     }
 
 

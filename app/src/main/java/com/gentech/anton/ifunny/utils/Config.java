@@ -15,4 +15,10 @@ public interface Config {
 
     String LIKE_MSG = "like";
     String CONTENT = "contentModel";
+    String LIKES_COUNT = "likesCount";
+
+    String FB_NATIVE_AD_PLACEMENT_ID = "YOUR_PLACEMENT_ID";
+    String FB_AD_HASHED_ID = "695e3070f27abbdd36d735a8cc32467c";
+
+    int AD_FREQUENCY = 5;
 }
