@@ -1,9 +1,13 @@
 package com.gentech.anton.ifunny.rest;
 
 import com.gentech.anton.ifunny.rest.model.BaseModel;
+import com.gentech.anton.ifunny.rest.model.LikeAddModel;
+import com.gentech.anton.ifunny.rest.model.TokenModel;
 
 import java.util.List;
 
+import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Path;
@@ -21,9 +25,11 @@ public interface RestService {
     Observable<List<BaseModel>> loadData(@Query("offset") int offset, @Query("limit") int limit);
 
     @GET("registration")
-    Observable<String> getAccessToken();
+    Observable<TokenModel> getAccessToken(@Query("User-agent") String userAgent);
 
+    @FormUrlEncoded
     @POST("comment/add")
-    void postLike(@Query("access-token") String accessToken);
+    Observable<LikeAddModel> postLike(@Query("access-token") String accessToken,
+                                     @Field("msg") String msg, @Field("post_id") String postId);
 }
 

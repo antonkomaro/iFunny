@@ -9,7 +9,7 @@ import java.util.List;
 
 public class BaseModel {
 
-    public Integer id;
+    public String id;
     public String title;
     public Integer type;
     public String url;

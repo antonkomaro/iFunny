@@ -10,10 +10,9 @@ public interface Config {
     String CONTENT_ITEMS = "contentItems";
     String POSITION = "position";
 
-    String CONTENT_TITLE = "contentTitle";
-    String CONTENT_URL = "contentUrl";
-    String CONTENT_LIKES = "contentLikes";
-
     int OFFSET = 0;
     int LIMIT = 10;
+
+    String LIKE_MSG = "like";
+    String CONTENT = "contentModel";
 }

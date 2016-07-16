@@ -1,6 +1,5 @@
 package com.gentech.anton.ifunny.ui.fragments;
 
-import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.gentech.anton.ifunny.R;
+import com.gentech.anton.ifunny.models.Content;
 import com.gentech.anton.ifunny.ui.activities.MainActivity;
 import com.gentech.anton.ifunny.utils.Config;
 
@@ -30,15 +30,17 @@ public class ImageFragment extends Fragment {
     @Bind(R.id.iv_content)
     SimpleDraweeView ivContent;
 
-    public static Fragment newInstance(String contentUrl, String contentTitle, int contentLikes) {
+    public static Fragment newInstance(Content content) {
         ImageFragment fragment = new ImageFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(Config.CONTENT_URL, contentUrl);
-        bundle.putString(Config.CONTENT_TITLE, contentTitle);
-        bundle.putInt(Config.CONTENT_LIKES, contentLikes);
+        bundle.putParcelable(Config.CONTENT, content);
         fragment.setArguments(bundle);
 
         return fragment;
+    }
+
+    public Content getContent() {
+        return getArguments().getParcelable(Config.CONTENT);
     }
 
     @Override
@@ -57,10 +59,11 @@ public class ImageFragment extends Fragment {
     }
 
     private void loadContent() {
-        ivContent.setImageURI(Uri.parse(getArguments().getString(Config.CONTENT_URL,"")));
-        tvContent.setText(getArguments().getString(Config.CONTENT_TITLE,""));
+        ivContent.setImageURI(Uri.parse(getContent().getUrl()));
+        tvContent.setText(getContent().getTitle());
 
-        ((MainActivity)getActivity()).updateLikes(getArguments().getInt(Config.CONTENT_LIKES,0));
-        ((MainActivity) getActivity()).setupShare(getArguments().getString(Config.CONTENT_URL,""));
+        ((MainActivity)getActivity()).showLikes(getContent().getLikeCount());
+        ((MainActivity) getActivity()).setupShare(getContent().getUrl());
+        ((MainActivity) getActivity()).setupLike(getContent().getId());
     }
 }

@@ -1,7 +1,6 @@
 package com.gentech.anton.ifunny.ui.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -15,12 +14,13 @@ import android.widget.TextView;
 
 import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.adapters.ContentAdapter;
+import com.gentech.anton.ifunny.models.Content;
+import com.gentech.anton.ifunny.rest.model.TokenModel;
 import com.gentech.anton.ifunny.ui.fragments.GifFragment;
 import com.gentech.anton.ifunny.ui.fragments.ImageFragment;
 import com.gentech.anton.ifunny.ui.fragments.VideoFragment;
 import com.gentech.anton.ifunny.utils.Config;
 import com.gentech.anton.ifunny.utils.ContentType;
-import com.gentech.anton.ifunny.models.ContentModel;
 import com.gentech.anton.ifunny.rest.RestService;
 import com.gentech.anton.ifunny.rest.ServiceFactory;
 import com.gentech.anton.ifunny.rest.model.BaseModel;
@@ -30,8 +30,8 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import static com.gentech.anton.ifunny.utils.ContentType.IMAGE;
@@ -39,9 +39,10 @@ import static com.gentech.anton.ifunny.utils.ContentType.IMAGE;
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     public static final String TAG = MainActivity.class.getSimpleName();
 
+    private RestService service;
+    private String regToken;
     private ContentAdapter adapter;
-
-    private ArrayList<ContentModel> contentItems;
+    private ArrayList<Content> contentItems;
 
     @Bind(R.id.viewpager)
     ViewPager pager;
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Bind(R.id.btn_share)
     ImageButton btnShare;
 
+    @Bind(R.id.btn_like)
+    ImageButton btnLike;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     // TODO: 15.07.16 Put this logic to presenter
     private void loadData() {
-        RestService service = ServiceFactory.createRestService(RestService.class, RestService.SERVICE_ENDPOINT);
+        service = ServiceFactory.createRestService(RestService.class, RestService.SERVICE_ENDPOINT);
         int limit = Config.LIMIT;
         int itemsCount = adapter.getCount();
         int offset = itemsCount == 0 ? Config.OFFSET : itemsCount;
@@ -112,64 +115,63 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         service.loadData(offset, limit)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<BaseModel>>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "loadData:onCompleted");
+                .doOnError(throwable -> Log.e(TAG, throwable.getLocalizedMessage()))
+                .subscribe(baseModels -> {
+                    if (baseModels != null && !baseModels.isEmpty()) {
+                        contentItems = (ArrayList<Content>) parseData(baseModels);
+                        updateAdapter();
                     }
+                });
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, e.getMessage());
-                    }
+        getRegToken();
+    }
 
-                    @Override
-                    public void onNext(List<BaseModel> baseModels) {
-                        if (baseModels != null && !baseModels.isEmpty()) {
-                            contentItems = (ArrayList<ContentModel>) parseData(baseModels);
-                            Log.d(TAG, "cc onNext contentItems " + contentItems.size());
-                            updateAdapter();
-                        }
-                    }
+    private void getRegToken() {
+        service.getAccessToken("8")
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(accessToken -> {
+                    regToken = accessToken.accessToken;
+                    Log.d(TAG, "accessToken " + accessToken);
                 });
     }
 
     @NonNull
-    private List<ContentModel> parseData(List<BaseModel> baseModel) {
-        List<ContentModel> data = new ArrayList<>();
-        ContentModel contentModel;
+    private List<Content> parseData(List<BaseModel> baseModel) {
+        List<Content> data = new ArrayList<>();
+        Content content;
         for (BaseModel bm : baseModel) {
             Log.d(TAG, bm.toString());
             if (!bm.videos.isEmpty()) {
-                contentModel = new ContentModel(bm.id, bm.title, (String) bm.videos.get(0), bm.views, bm.countComment, ContentType.VIDEO);
+                content = new Content(bm.id, bm.title, (String) bm.videos.get(0), bm.views, bm.countComment, ContentType.VIDEO);
             } else if (bm.images.isEmpty()) {
-                contentModel = new ContentModel(bm.id, bm.title, bm.img, bm.views, bm.countComment, ContentType.GIF);
+                content = new Content(bm.id, bm.title, bm.img, bm.views, bm.countComment, ContentType.GIF);
             } else {
-                contentModel = new ContentModel(bm.id, bm.title, bm.images.get(0), bm.views, bm.countComment, IMAGE);
+                content = new Content(bm.id, bm.title, bm.images.get(0), bm.views, bm.countComment, IMAGE);
             }
-            data.add(contentModel);
+            data.add(content);
         }
         return data;
     }
 
-    private List<Fragment> buildFragments(List<ContentModel> data) {
+    private List<Fragment> buildFragments(List<Content> data) {
         List<Fragment> fragments = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             Bundle b = new Bundle();
             b.putInt(Config.POSITION, i);
 
             Fragment fragment;
-            ContentModel contentModel = data.get(i);
-            int contentType = contentModel.getContentType();
+            Content content = data.get(i);
+            int contentType = content.getContentType();
             switch (contentType) {
                 case ContentType.IMAGE:
-                    fragment = ImageFragment.newInstance(contentModel.getUrl(), contentModel.getTitle(), contentModel.getLikeCount());
+                    fragment = ImageFragment.newInstance(content);
                     break;
                 case ContentType.GIF:
-                    fragment = GifFragment.newInstance(contentModel.getUrl(), contentModel.getTitle(), contentModel.getLikeCount());
+                    fragment = GifFragment.newInstance(content);
                     break;
                 case ContentType.VIDEO:
-                    fragment = VideoFragment.newInstance(contentModel.getUrl(), contentModel.getTitle(), contentModel.getLikeCount());
+                    fragment = VideoFragment.newInstance(content);
                     break;
                 default:
                     return null;
@@ -196,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         }
     }
 
-    public void updateLikes(int likes) {
+    public void showLikes(int likes) {
         tvLikes.setText(String.valueOf(likes));
     }
 
@@ -211,29 +213,21 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         });
     }
 
-    public void setupLike(String contentUrl) {
-        final String[] regToken = new String[1];
-        ServiceFactory.createRestService(RestService.class, RestService.SERVICE_ENDPOINT)
-                .getAccessToken()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "getAccessToken:onCompleted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(String accessToken) {
-                        regToken[0] = accessToken;
-                    }
-                });
-
-
+    public void setupLike(String contentId) {
+        btnLike.setOnClickListener(view -> postLike(contentId));
     }
+
+    // TODO: 16.07.16 Not posting likes (which are comments in demo)
+    public void postLike(String contentId) {
+//        service.postLike(regToken, Config.LIKE_MSG, contentId)
+//                .doOnError(t
+//                        -> Log.e(TAG, "Error posting like " + t.getLocalizedMessage()))
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(likeAddModel -> {
+//                    Log.d(TAG, "likeAddModel " + likeAddModel);
+//                });
+    }
+
+
 }

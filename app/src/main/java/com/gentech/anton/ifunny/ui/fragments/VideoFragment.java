@@ -1,8 +1,6 @@
 package com.gentech.anton.ifunny.ui.fragments;
 
 import android.annotation.SuppressLint;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -15,6 +13,7 @@ import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.gentech.anton.ifunny.R;
+import com.gentech.anton.ifunny.models.Content;
 import com.gentech.anton.ifunny.ui.activities.MainActivity;
 import com.gentech.anton.ifunny.utils.Config;
 import com.gentech.anton.ifunny.utils.Utils;
@@ -35,15 +34,17 @@ public class VideoFragment extends Fragment {
     WebView wvVideo;
 
     // TODO: 15.07.16 Put logic into parent common fragment
-    public static VideoFragment newInstance(String contentUrl, String contentTitle, int contentLikes) {
+    public static VideoFragment newInstance(Content content) {
         VideoFragment videoFragment = new VideoFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(Config.CONTENT_URL, contentUrl);
-        bundle.putString(Config.CONTENT_TITLE, contentTitle);
-        bundle.putInt(Config.CONTENT_LIKES, contentLikes);
+        bundle.putParcelable(Config.CONTENT, content);
         videoFragment.setArguments(bundle);
 
         return videoFragment;
+    }
+
+    public Content getContent() {
+        return getArguments().getParcelable(Config.CONTENT);
     }
 
     @Override
@@ -74,10 +75,9 @@ public class VideoFragment extends Fragment {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void loadContent() {
+        tvContent.setText(getContent().getTitle());
 
-        tvContent.setText(getArguments().getString(Config.CONTENT_TITLE, ""));
-
-        final String contentUrl = getArguments().getString(Config.CONTENT_URL, "");
+        final String contentUrl = getContent().getUrl();
         wvVideo.getSettings().setJavaScriptEnabled(true);
         final String mimeType = "text/html";
         final String encoding = "UTF-8";
@@ -90,9 +90,9 @@ public class VideoFragment extends Fragment {
         wvVideo.setWebChromeClient(new WebChromeClient());
         wvVideo.loadDataWithBaseURL("", html, mimeType, encoding, "");
 
-        ((MainActivity) getActivity()).updateLikes(getArguments().getInt(Config.CONTENT_LIKES, 0));
+        ((MainActivity) getActivity()).showLikes(getContent().getLikeCount());
         ((MainActivity) getActivity()).setupShare(contentUrl);
-        ((MainActivity) getActivity()).setupLike(contentUrl);
+        ((MainActivity) getActivity()).setupLike(getContent().getId());
     }
 
 

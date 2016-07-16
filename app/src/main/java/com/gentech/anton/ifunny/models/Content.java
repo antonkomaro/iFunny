@@ -3,25 +3,23 @@ package com.gentech.anton.ifunny.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.gentech.anton.ifunny.utils.ContentType;
-
 /**
  * Created by anton on 12.07.16.
  */
-public class ContentModel implements Parcelable {
+public class Content implements Parcelable {
 
-    private Integer id;
+    private String id;
     private String title;
     private String url;
     private Integer viewCount;
     private Integer likeCount;
     private Integer contentType;
 
-    public ContentModel() {
+    public Content() {
     }
 
-    public ContentModel(Integer id, String title, String url,
-                        Integer viewCount, Integer likeCount, Integer contentType) {
+    public Content(String id, String title, String url,
+                   Integer viewCount, Integer likeCount, Integer contentType) {
         this.id = id;
         this.title = title;
         this.url = url;
@@ -38,11 +36,11 @@ public class ContentModel implements Parcelable {
         this.contentType = contentType;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -83,7 +81,7 @@ public class ContentModel implements Parcelable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ContentModel that = (ContentModel) o;
+        Content that = (Content) o;
 
         if (!id.equals(that.id)) return false;
         if (!title.equals(that.title)) return false;
@@ -107,7 +105,7 @@ public class ContentModel implements Parcelable {
 
     @Override
     public String toString() {
-        return "ContentModel{" +
+        return "Content{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", url='" + url + '\'' +
@@ -124,7 +122,7 @@ public class ContentModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
+        parcel.writeString(id);
         parcel.writeString(title);
         parcel.writeString(url);
         parcel.writeInt(viewCount);
@@ -133,8 +131,8 @@ public class ContentModel implements Parcelable {
 
     }
 
-    protected ContentModel(Parcel in) {
-        id = in.readInt();
+    protected Content(Parcel in) {
+        id = in.readString();
         title = in.readString();
         url = in.readString();
         viewCount = in.readInt();
@@ -142,15 +140,15 @@ public class ContentModel implements Parcelable {
         contentType = in.readInt();
     }
 
-    public static final Creator<ContentModel> CREATOR = new Creator<ContentModel>() {
+    public static final Creator<Content> CREATOR = new Creator<Content>() {
         @Override
-        public ContentModel createFromParcel(Parcel in) {
-            return new ContentModel(in);
+        public Content createFromParcel(Parcel in) {
+            return new Content(in);
         }
 
         @Override
-        public ContentModel[] newArray(int size) {
-            return new ContentModel[size];
+        public Content[] newArray(int size) {
+            return new Content[size];
         }
     };
 }
