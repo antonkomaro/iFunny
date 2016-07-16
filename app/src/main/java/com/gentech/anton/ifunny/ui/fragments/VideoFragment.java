@@ -5,11 +5,13 @@ import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.gentech.anton.ifunny.R;
@@ -24,7 +26,7 @@ import butterknife.ButterKnife;
 /**
  * Created by anton on 13.07.16.
  */
-public class VideoFragment extends Fragment {
+public class VideoFragment extends ContentFragment {
     public static final String TAG = VideoFragment.class.getSimpleName();
 
     @Bind(R.id.tv_content)
@@ -33,7 +35,6 @@ public class VideoFragment extends Fragment {
     @Bind(R.id.wv_video)
     WebView wvVideo;
 
-    // TODO: 15.07.16 Put logic into parent common fragment
     public static VideoFragment newInstance(Content content) {
         VideoFragment videoFragment = new VideoFragment();
         Bundle bundle = new Bundle();
@@ -43,27 +44,8 @@ public class VideoFragment extends Fragment {
         return videoFragment;
     }
 
-    public Content getContent() {
-        return getArguments().getParcelable(Config.CONTENT);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        View rootView = layoutInflater.inflate(R.layout.fragment_video, viewGroup, false);
-        ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        loadContent();
+    protected View inflateRootView(LayoutInflater layoutInflater, ViewGroup viewGroup) {
+        return layoutInflater.inflate(R.layout.fragment_video, viewGroup, false);
     }
 
     @Override
@@ -74,7 +56,7 @@ public class VideoFragment extends Fragment {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private void loadContent() {
+    protected void loadContent() {
         tvContent.setText(getContent().getTitle());
 
         final String contentUrl = getContent().getUrl();
@@ -90,9 +72,13 @@ public class VideoFragment extends Fragment {
         wvVideo.setWebChromeClient(new WebChromeClient());
         wvVideo.loadDataWithBaseURL("", html, mimeType, encoding, "");
 
-        ((MainActivity) getActivity()).showLikes(getContent().getLikeCount());
-        ((MainActivity) getActivity()).setupShare(contentUrl);
-        ((MainActivity) getActivity()).setupLike(getContent().getId());
+//        wvVideo.setWebViewClient(new WebViewClient(){
+//            public void onPageFinished(WebView view, String url) {
+//                Log.d(TAG, "onPageFinished");
+//            }
+//        });
+
+        setupButtons();
     }
 
 

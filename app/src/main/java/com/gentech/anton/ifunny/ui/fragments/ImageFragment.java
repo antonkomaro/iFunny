@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 /**
  * Created by anton on 13.07.16.
  */
-public class ImageFragment extends Fragment {
+public class ImageFragment extends ContentFragment {
     public static final String TAG = VideoFragment.class.getSimpleName();
 
     @Bind(R.id.tv_content)
@@ -39,31 +39,14 @@ public class ImageFragment extends Fragment {
         return fragment;
     }
 
-    public Content getContent() {
-        return getArguments().getParcelable(Config.CONTENT);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_image, container, false);
-        ButterKnife.bind(this, rootView);
-        loadContent();
-        return rootView;
-    }
-
-    private void loadContent() {
+    protected void loadContent() {
         ivContent.setImageURI(Uri.parse(getContent().getUrl()));
         tvContent.setText(getContent().getTitle());
 
-        ((MainActivity)getActivity()).showLikes(getContent().getLikeCount());
-        ((MainActivity) getActivity()).setupShare(getContent().getUrl());
-        ((MainActivity) getActivity()).setupLike(getContent().getId());
+        setupButtons();
+    }
+
+    protected View inflateRootView(LayoutInflater layoutInflater, ViewGroup viewGroup) {
+        return layoutInflater.inflate(R.layout.fragment_image, viewGroup, false);
     }
 }

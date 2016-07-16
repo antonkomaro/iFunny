@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  * Created by anton on 13.07.16.
  */
 
-public class GifFragment extends Fragment {
+public class GifFragment extends ContentFragment {
     public static final String TAG = GifFragment.class.getSimpleName();
 
     @Bind(R.id.tv_content)
@@ -42,26 +42,8 @@ public class GifFragment extends Fragment {
         return fragment;
     }
 
-    public Content getContent() {
-        return getArguments().getParcelable(Config.CONTENT);
-    }
-
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_gif, container, false);
-        ButterKnife.bind(this, rootView);
-        loadContent();
-        return rootView;
-    }
-
-    private void loadContent() {
+    protected void loadContent() {
         tvContent.setText(getContent().getTitle());
 
         DraweeController controller = Fresco.newDraweeControllerBuilder()
@@ -70,11 +52,12 @@ public class GifFragment extends Fragment {
                 .build();
         ivContent.setController(controller);
 
-        ((MainActivity)getActivity()).showLikes(getContent().getLikeCount());
-        ((MainActivity) getActivity()).setupShare(getContent().getUrl());
-        ((MainActivity) getActivity()).setupLike(getContent().getId());
+        setupButtons();
     }
 
+    protected View inflateRootView(LayoutInflater layoutInflater, ViewGroup viewGroup) {
+        return layoutInflater.inflate(R.layout.fragment_gif, viewGroup, false);
+    }
 
 
 }

@@ -21,4 +21,6 @@ public interface Config {
     String FB_AD_HASHED_ID = "695e3070f27abbdd36d735a8cc32467c";
 
     int AD_FREQUENCY = 5;
+
+    int API_USER_AGENT = 8;
 }

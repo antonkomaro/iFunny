@@ -89,18 +89,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
-        Log.d(TAG, "cc onSaveInstanceState contentItems " + contentItems);
         if (contentItems != null && !contentItems.isEmpty()) {
             bundle.putParcelableArrayList(Config.CONTENT_ITEMS, contentItems);
         }
     }
 
     private void updateAdapter() {
-        Log.d(TAG, "cc updateAdapter");
         if (contentItems != null && !contentItems.isEmpty()) {
-            Log.d(TAG, "cc updateAdapter in if");
             List<Fragment> fragments = buildFragments(contentItems);
-            Log.d(TAG, "cc updateAdapter in if fragments " + fragments);
             adapter.addAll(fragments);
         }
     }
@@ -111,9 +107,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         int limit = Config.LIMIT;
         int itemsCount = adapter.getCount();
         int offset = itemsCount == 0 ? Config.OFFSET : itemsCount;
-        Log.d(TAG, "cc loadData itemsCount " + itemsCount);
-        Log.d(TAG, "cc loadData offset " + offset);
-        Log.d(TAG, "cc loadData limit " + limit);
         service.loadData(offset, limit)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -129,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     private void getRegToken() {
-        service.getAccessToken("8")
+        service.getAccessToken(String.valueOf(Config.API_USER_AGENT))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(accessToken -> {
@@ -193,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        Log.d(TAG, "onPageScrolled");
+        //do nothing
     }
 
     @Override
