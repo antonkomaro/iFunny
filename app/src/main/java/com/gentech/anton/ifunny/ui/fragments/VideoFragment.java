@@ -64,19 +64,13 @@ public class VideoFragment extends ContentFragment {
         final String mimeType = "text/html";
         final String encoding = "UTF-8";
         String html = "<iframe class=\"youtube-player\" " +
-                "style=\"border: 0; width: 100%; height: 95%; padding:0px; margin:0px\" "
+                "style=\"border: 0; width: 100%; height: 100%; padding:0; margin:0\" "
                 + " id=\"ytplayer\" type=\"text/html\" src=\"http://www.youtube.com/embed/"
                 + Utils.getYoutubeVideoIdFromUrl(contentUrl)
                 + "?fs=0\" frameborder=\"0\">\n"
                 + "</iframe>\n";
         wvVideo.setWebChromeClient(new WebChromeClient());
         wvVideo.loadDataWithBaseURL("", html, mimeType, encoding, "");
-
-//        wvVideo.setWebViewClient(new WebViewClient(){
-//            public void onPageFinished(WebView view, String url) {
-//                Log.d(TAG, "onPageFinished");
-//            }
-//        });
 
         setupButtons();
     }
