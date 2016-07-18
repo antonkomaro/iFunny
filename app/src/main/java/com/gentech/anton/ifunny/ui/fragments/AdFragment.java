@@ -20,6 +20,7 @@ import com.facebook.ads.AdSettings;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
 import com.gentech.anton.ifunny.R;
+import com.gentech.anton.ifunny.presenters.AnalyticsPresenter;
 import com.gentech.anton.ifunny.ui.activities.MainActivity;
 import com.gentech.anton.ifunny.utils.Config;
 
@@ -108,6 +109,9 @@ public class AdFragment extends Fragment {
             @Override
             public void onAdClicked(Ad ad) {
                 Log.d(TAG, "onAdClicked");
+                AnalyticsPresenter.getInstance().sendAnalyticsEvent(TAG,
+                        AnalyticsPresenter.CATEGORY_ADVERTISEMENT, AnalyticsPresenter.ACTION_FB_NATIVE_CLICKED);
+
             }
         });
 

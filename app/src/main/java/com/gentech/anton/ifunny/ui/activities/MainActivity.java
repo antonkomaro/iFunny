@@ -8,14 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.adapters.ContentAdapter;
 import com.gentech.anton.ifunny.models.Content;
-import com.gentech.anton.ifunny.rest.model.TokenModel;
+import com.gentech.anton.ifunny.presenters.AnalyticsPresenter;
 import com.gentech.anton.ifunny.ui.fragments.AdFragment;
 import com.gentech.anton.ifunny.ui.fragments.GifFragment;
 import com.gentech.anton.ifunny.ui.fragments.ImageFragment;
@@ -32,7 +31,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import static com.gentech.anton.ifunny.utils.ContentType.IMAGE;
@@ -208,6 +206,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             sendIntent.setType("text/plain");
             startActivity(Intent.createChooser(sendIntent,
                     getResources().getText(R.string.send_to)));
+
+            AnalyticsPresenter.getInstance().sendAnalyticsEvent(TAG,
+                    AnalyticsPresenter.CATEGORY_POST_ACTIONS, AnalyticsPresenter.ACTION_POST_SHARED);
         });
     }
 
@@ -225,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 //                .subscribe(likeAddModel -> {
 //                    Log.d(TAG, "likeAddModel " + likeAddModel);
         incrementLikes();
+        AnalyticsPresenter.getInstance().sendAnalyticsEvent(TAG, AnalyticsPresenter.CATEGORY_POST_ACTIONS, AnalyticsPresenter.ACTION_POST_LIKED);
 //                });
 
     }
