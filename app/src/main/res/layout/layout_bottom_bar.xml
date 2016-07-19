@@ -12,7 +12,7 @@
 
     <ImageButton
         android:id="@+id/btn_like"
-        android:src="@drawable/ic_like"
+        android:src="@drawable/button_like"
         android:layout_weight="2"
         android:clickable="true"
         android:layout_margin="@dimen/activity_horizontal_margin"
@@ -34,7 +34,7 @@
     <ImageButton
         android:layout_weight="2"
         android:id="@+id/btn_share"
-        android:src="@drawable/ic_share"
+        android:src="@drawable/button_share"
         android:clickable="true"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:layout_width="0dp"

@@ -34,25 +34,21 @@ public class ContentPresenter {
     private UpdateListener updateListener;
     private ActionsListener actionsListener;
 
-//    private static RestClient restClient;
     private RestService service;
     private ArrayList<Content> contentItems;
 
     public ContentPresenter(ActionsListener actionsListener) {
-//        restClient = RestClient.getInstance();
         this.actionsListener = actionsListener;
         service = ServiceFactory.createRestService(RestService.class, RestService.SERVICE_ENDPOINT);
     }
 
     public ContentPresenter(UpdateListener updateListener) {
-//        restClient = RestClient.getInstance();
         this.updateListener = updateListener;
         service = ServiceFactory.createRestService(RestService.class, RestService.SERVICE_ENDPOINT);
     }
 
     public void loadData(int itemsCount) {
         int limit = Config.LIMIT;
-//        int itemsCount = adapter.getCount();
         int offset = itemsCount == 0 ? Config.OFFSET : itemsCount;
         service.loadData(offset, limit)
                 .subscribeOn(Schedulers.newThread())
@@ -115,7 +111,7 @@ public class ContentPresenter {
     }
 
     public void showLikes(String contentId) {
-        String marker = "onPageSelected likes_post_id_" + contentId;
+        String marker = "likes_post_id_" + contentId;
         service.getLikes(marker)
                 .doOnError(t
                         -> Log.e(TAG, "Error getting likes count " + t.getLocalizedMessage()))
@@ -123,22 +119,17 @@ public class ContentPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((likesCount) -> {
                     actionsListener.updateLikes(likesCount);
-                    Log.d(TAG, "onPageSelected likes showLikes contentId "
-                            + contentId + " likes " + likesCount);
                 });
     }
 
     public void postLike(String contentId) {
         String marker = "likes_post_id_" + contentId;
         service.postLike(marker)
-                .doOnError(t -> {
-                    Log.e(TAG, "Error posting like " + t.getLocalizedMessage());
-                })
+                .doOnError(t -> Log.e(TAG, "Error posting like " + t.getLocalizedMessage()))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((likesCount) -> {
                     actionsListener.updateLikes(likesCount);
-                    Log.d(TAG, "likes postLike contentId " + contentId + " likes " + likesCount);
                 });
         AnalyticsPresenter.getInstance().sendAnalyticsEvent(
                 TAG, AnalyticsPresenter.CATEGORY_POST_ACTIONS, AnalyticsPresenter.ACTION_POST_LIKED);

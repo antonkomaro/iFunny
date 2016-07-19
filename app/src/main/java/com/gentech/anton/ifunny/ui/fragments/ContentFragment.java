@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,9 +72,9 @@ public abstract class ContentFragment extends Fragment implements ActionsListene
     protected abstract View inflateRootView(LayoutInflater layoutInflater, ViewGroup viewGroup);
 
     protected void setupButtons() {
-        showLikes(getContent().getId());
+        presenter.showLikes(getContent().getId());
         setupShare(getContent().getUrl());
-        setupLike(getContent().getId());
+        btnLike.setOnClickListener(view -> presenter.postLike(getContent().getId()));
     }
 
     protected abstract void loadContent();
@@ -92,14 +93,6 @@ public abstract class ContentFragment extends Fragment implements ActionsListene
         });
     }
 
-    protected void setupLike(String contentId) {
-        btnLike.setOnClickListener(view -> postLike(contentId));
-    }
-
-    protected void showLikes(String contentId) {
-        presenter.showLikes(contentId);
-    }
-
     @Override
     public void updateLikes(ResponseBody likesCount) {
         try {
@@ -109,11 +102,5 @@ public abstract class ContentFragment extends Fragment implements ActionsListene
             e.printStackTrace();
         }
     }
-
-    protected void postLike(String contentId) {
-        presenter.postLike(contentId);
-    }
-
-
 
 }
