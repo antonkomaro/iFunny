@@ -3,34 +3,24 @@ package com.gentech.anton.ifunny.ui.fragments;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.TextView;
 
 import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.models.Content;
-import com.gentech.anton.ifunny.ui.activities.MainActivity;
 import com.gentech.anton.ifunny.utils.Config;
 import com.gentech.anton.ifunny.utils.Utils;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by anton on 13.07.16.
  */
 public class VideoFragment extends ContentFragment {
     public static final String TAG = VideoFragment.class.getSimpleName();
-
-    @Bind(R.id.tv_content)
-    TextView tvContent;
 
     @Bind(R.id.wv_video)
     WebView wvVideo;

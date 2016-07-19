@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.models.Content;
+import com.gentech.anton.ifunny.presenters.ContentPresenter;
 import com.gentech.anton.ifunny.ui.activities.MainActivity;
 import com.gentech.anton.ifunny.utils.Config;
 
@@ -23,9 +24,6 @@ import butterknife.ButterKnife;
  */
 public class ImageFragment extends ContentFragment {
     public static final String TAG = VideoFragment.class.getSimpleName();
-
-    @Bind(R.id.tv_content)
-    TextView tvContent;
 
     @Bind(R.id.iv_content)
     SimpleDraweeView ivContent;
@@ -49,4 +47,5 @@ public class ImageFragment extends ContentFragment {
     protected View inflateRootView(LayoutInflater layoutInflater, ViewGroup viewGroup) {
         return layoutInflater.inflate(R.layout.fragment_image, viewGroup, false);
     }
+
 }

@@ -27,9 +27,6 @@ import butterknife.ButterKnife;
 public class GifFragment extends ContentFragment {
     public static final String TAG = GifFragment.class.getSimpleName();
 
-    @Bind(R.id.tv_content)
-    TextView tvContent;
-
     @Bind(R.id.iv_content)
     SimpleDraweeView ivContent;
 

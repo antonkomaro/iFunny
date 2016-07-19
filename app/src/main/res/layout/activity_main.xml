@@ -29,8 +29,7 @@
         android:layout_below="@+id/toolbar"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@color/color_dark"
-        android:layout_above="@+id/linearLayout">
+        android:background="@color/color_dark">
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/fragment_container"
@@ -39,47 +38,5 @@
         </FrameLayout>
     </android.support.v4.view.ViewPager>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:background="@color/primary_text"
-        android:orientation="horizontal"
-        android:id="@+id/linearLayout">
-
-        <ImageButton
-            android:id="@+id/btn_like"
-            android:src="@drawable/ic_like"
-            android:layout_weight="2"
-            android:clickable="true"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:contentDescription="@string/like" />
-
-        <TextView
-            android:id="@+id/tv_likes"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            tools:text="14335"
-            android:gravity="center"
-            android:textColor="@color/primary"
-            android:visibility="visible"/>
-
-        <ImageButton
-            android:layout_weight="2"
-            android:id="@+id/btn_share"
-            android:src="@drawable/ic_share"
-            android:clickable="true"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:contentDescription="@string/like" />
-
-    </LinearLayout>
 
 </RelativeLayout>

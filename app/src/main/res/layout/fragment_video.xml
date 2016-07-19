@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/item_title"/>
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/color_dark"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/divider"
+        android:visibility="visible" />
 
     <WebView
         android:id="@+id/wv_video"
-        android:layout_gravity="center_horizontal"
         android:background="@null"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tv_content">
     </WebView>
-</LinearLayout>
+
+
+    <include layout="@layout/layout_bottom_bar"/>
+
+</RelativeLayout>

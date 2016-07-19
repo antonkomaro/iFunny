@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
 
     <include layout="@layout/item_title"/>
 
@@ -15,4 +14,7 @@
         fresco:placeholderImage="@drawable/ph_loading"
         android:visibility="visible"/>
 
-</LinearLayout>
+    <include layout="@layout/layout_bottom_bar"/>
+
+
+</RelativeLayout>
