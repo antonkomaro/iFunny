@@ -62,10 +62,6 @@ public class VideoFragment extends ContentFragment {
 
         wvVideo.setWebChromeClient(new WebChromeClient());
         wvVideo.setBackgroundColor(0);
-
-        wvVideo.getSettings().setBuiltInZoomControls(true);
-
-
         wvVideo.loadDataWithBaseURL("", html, mimeType, encoding, "");
 
         setupButtons();
