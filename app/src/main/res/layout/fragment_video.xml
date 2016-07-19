@@ -14,13 +14,10 @@
         android:textColor="@color/divider"
         android:visibility="visible" />
 
-    <WebView
-        android:id="@+id/wv_video"
-        android:background="@null"
+    <FrameLayout
+        android:id="@+id/youtube_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/tv_content">
-    </WebView>
+        android:layout_height="280dp" />
 
 
     <include layout="@layout/layout_bottom_bar"/>
