@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements UpdateListener, V
 
         adapter = new ContentAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
-        pager.setOffscreenPageLimit(3);
+        pager.setOffscreenPageLimit(0);
         pager.addOnPageChangeListener(this);
 
         if (bundle == null || contentItems == null) {

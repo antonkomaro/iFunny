@@ -84,7 +84,7 @@ public class ContentPresenter {
         List<Fragment> fragments = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
 
-            if (i % Config.AD_FREQUENCY == 0) {
+            if (i % Config.AD_FREQUENCY == 0 && i!=0) {
                 Fragment fragment = new AdFragment();
                 fragments.add(fragment);
             }

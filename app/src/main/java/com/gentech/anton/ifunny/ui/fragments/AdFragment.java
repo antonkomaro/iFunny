@@ -74,7 +74,7 @@ public class AdFragment extends Fragment {
     }
 
     private void showNativeAd(){
-        nativeAd = new NativeAd(getContext(), Config.FB_NATIVE_AD_PLACEMENT_ID);
+        nativeAd = new NativeAd(getContext(), Config.FB_ADS_REAL_ID);
         nativeAd.setAdListener(new AdListener() {
 
             @Override
@@ -115,7 +115,9 @@ public class AdFragment extends Fragment {
             }
         });
 
-        AdSettings.addTestDevice("HASHED_ID");
+        AdSettings.addTestDevice(Config.FB_ADS_REAL_ID);
+
+//        AdSettings.addTestDevice("HASHED_ID");
 //      AdSettings.addTestDevice(Config.FB_AD_HASHED_ID);
 
         nativeAd.loadAd();
