@@ -59,11 +59,9 @@ public class VideoFragment extends ContentFragment {
                 + Utils.getYoutubeVideoIdFromUrl(contentUrl)
                 + "?fs=0\" frameborder=\"0\">\n"
                 + "</iframe>\n";
-
         wvVideo.setWebChromeClient(new WebChromeClient());
-        wvVideo.setBackgroundColor(0);
         wvVideo.loadDataWithBaseURL("", html, mimeType, encoding, "");
-
+        wvVideo.setBackgroundColor(0);
         setupButtons();
     }
 
