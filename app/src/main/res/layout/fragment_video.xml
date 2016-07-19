@@ -10,19 +10,21 @@
         android:background="@color/color_dark"
         android:gravity="center"
         android:text="@string/app_name"
+        android:layout_alignParentTop="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:textColor="@color/divider"
-        android:visibility="visible" />
+        android:textColor="@color/divider"/>
 
     <WebView
         android:id="@+id/wv_video"
         android:background="@null"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/include"
         android:layout_below="@+id/tv_content">
     </WebView>
 
 
-    <include layout="@layout/layout_bottom_bar"/>
+    <include layout="@layout/layout_bottom_bar"
+        android:id="@+id/include" />
 
 </RelativeLayout>
