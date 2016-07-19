@@ -13,6 +13,7 @@ import com.gentech.anton.ifunny.interfaces.UpdateListener;
 import com.gentech.anton.ifunny.models.Content;
 import com.gentech.anton.ifunny.presenters.ContentPresenter;
 
+import com.gentech.anton.ifunny.ui.fragments.VideoFragment;
 import com.gentech.anton.ifunny.utils.Config;
 
 import java.util.ArrayList;
@@ -99,5 +100,11 @@ public class MainActivity extends AppCompatActivity implements UpdateListener, V
         if (position == count - 1) {
             presenter.loadData(count);
         }
+
+//        Fragment fragment = adapter.getItem(position);
+//        if (fragment instanceof VideoFragment) {
+//            ((VideoFragment)fragment).resetPlayer();
+//        }
+
     }
 }

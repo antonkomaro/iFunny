@@ -14,11 +14,12 @@
         android:textColor="@color/divider"
         android:visibility="visible" />
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/youtube_fragment"
         android:layout_width="match_parent"
-        android:layout_height="280dp" />
-
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/tv_content"/>
 
     <include layout="@layout/layout_bottom_bar"/>
 
