@@ -12,4 +12,7 @@
     <string name="like">like</string>
     <string name="send_to">Share from iFunny!</string>
     <string name="image_desc">description</string>
+    <string name="turn_on_wifi">Turn on Wifi</string>
+    <string name="error_network_problems">Network lost</string>
+    <string name="no_connection">No connection</string>
 </resources>

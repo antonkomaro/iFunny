@@ -6,7 +6,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.ViewGroup;
 
+import com.gentech.anton.ifunny.IFunnyApp;
 import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.adapters.ContentAdapter;
 import com.gentech.anton.ifunny.interfaces.UpdateListener;
@@ -15,6 +18,7 @@ import com.gentech.anton.ifunny.presenters.ContentPresenter;
 
 import com.gentech.anton.ifunny.ui.fragments.VideoFragment;
 import com.gentech.anton.ifunny.utils.Config;
+import com.gentech.anton.ifunny.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +41,11 @@ public class MainActivity extends AppCompatActivity implements UpdateListener, V
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
+
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(MainActivity.this);
 
@@ -55,12 +61,25 @@ public class MainActivity extends AppCompatActivity implements UpdateListener, V
         pager.setOffscreenPageLimit(0);
         pager.addOnPageChangeListener(this);
 
-        if (bundle == null || contentItems == null) {
-            loadData();
-        } else {
-            contentItems = bundle.getParcelableArrayList(Config.CONTENT_ITEMS);
-            updateAdapter(contentItems);
+        if (pager.getVisibility() == View.GONE) {
+            pager.setVisibility(View.VISIBLE);
         }
+
+        if (Utils.isOnline(this)) {
+            if (bundle == null || contentItems == null) {
+                loadData();
+
+            } else {
+                contentItems = bundle.getParcelableArrayList(Config.CONTENT_ITEMS);
+                updateAdapter(contentItems);
+            }
+
+        } else {
+            pager.setVisibility(View.GONE);
+            Utils.askToTurnOnInternet(this);
+        }
+
+
     }
 
     @Override

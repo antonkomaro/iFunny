@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/tv_content"
@@ -21,12 +22,37 @@
         android:layout_below="@+id/tv_content"
         android:layout_above="@+id/actionsPanel">
 
-    <fragment
-        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
-        android:id="@+id/youtube_fragment"
-        android:tag="tag"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <!--<fragment-->
+        <!--android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"-->
+        <!--android:id="@+id/youtube_fragment"-->
+        <!--android:tag="tag"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/thumb"
+                android:scaleType="fitCenter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                fresco:placeholderImage="@drawable/ph_loading"
+                android:visibility="visible"/>
+
+            <ImageView
+                android:id="@+id/play"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:src="@drawable/ic_play" />
+
+        </FrameLayout>
+
+
 
     </LinearLayout>
 

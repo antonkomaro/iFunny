@@ -17,6 +17,8 @@ import rx.Observable;
 public interface RestService {
     String SERVICE_ENDPOINT = "http://api.demo-stage.info/";
 
+    String YT_IMAGE_ENDPOINT = "http://img.youtube.com/vi/";
+
     @GET("posts/8")
     Observable<List<BaseModel>> loadData(@Query("offset") int offset, @Query("limit") int limit);
 
@@ -28,5 +30,7 @@ public interface RestService {
 
     @GET("counters/get")
     Observable<ResponseBody> getLikes(@Query("marker") String marker);
+
+
 }
 

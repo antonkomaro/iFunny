@@ -50,6 +50,8 @@ public class ContentPresenter {
     public void loadData(int itemsCount) {
         int limit = Config.LIMIT;
         int offset = itemsCount == 0 ? Config.OFFSET : itemsCount;
+
+
         service.loadData(offset, limit)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

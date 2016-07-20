@@ -1,8 +1,15 @@
 package com.gentech.anton.ifunny;
 
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
+import android.support.v7.app.AlertDialog;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.gentech.anton.ifunny.models.Content;
+import com.gentech.anton.ifunny.utils.Utils;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
@@ -35,4 +42,5 @@ public class IFunnyApp extends Application {
         tracker = googleAnalytics.newTracker(R.xml.global_tracker);
         tracker.enableAdvertisingIdCollection(true);
     }
+
 }
