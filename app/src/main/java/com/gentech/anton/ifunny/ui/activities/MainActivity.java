@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.adapters.ContentAdapter;
@@ -14,6 +15,7 @@ import com.gentech.anton.ifunny.models.Content;
 import com.gentech.anton.ifunny.presenters.ContentPresenter;
 
 import com.gentech.anton.ifunny.utils.Config;
+import com.gentech.anton.ifunny.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +56,22 @@ public class MainActivity extends AppCompatActivity implements UpdateListener, V
         pager.setOffscreenPageLimit(0);
         pager.addOnPageChangeListener(this);
 
-        if (bundle == null || contentItems == null) {
-            loadData();
+        if (pager.getVisibility() == View.GONE) {
+            pager.setVisibility(View.VISIBLE);
+        }
+
+        if (Utils.isOnline(this)) {
+            if (bundle == null || contentItems == null) {
+                loadData();
+
+            } else {
+                contentItems = bundle.getParcelableArrayList(Config.CONTENT_ITEMS);
+                updateAdapter(contentItems);
+            }
+
         } else {
-            contentItems = bundle.getParcelableArrayList(Config.CONTENT_ITEMS);
-            updateAdapter(contentItems);
+            pager.setVisibility(View.GONE);
+            Utils.askToTurnOnInternet(this);
         }
     }
 
