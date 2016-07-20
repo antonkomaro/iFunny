@@ -101,10 +101,5 @@ public class MainActivity extends AppCompatActivity implements UpdateListener, V
             presenter.loadData(count);
         }
 
-//        Fragment fragment = adapter.getItem(position);
-//        if (fragment instanceof VideoFragment) {
-//            ((VideoFragment)fragment).resetPlayer();
-//        }
-
     }
 }

@@ -15,12 +15,23 @@
         android:visibility="visible" />
 
     <LinearLayout
-        android:id="@+id/youtube_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_below="@+id/tv_content"/>
+        android:layout_below="@+id/tv_content"
+        android:layout_above="@+id/actionsPanel">
 
-    <include layout="@layout/layout_bottom_bar"/>
+    <fragment
+        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+        android:id="@+id/youtube_fragment"
+        android:tag="tag"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/actionsPanel"
+        layout="@layout/layout_bottom_bar"/>
 
 </RelativeLayout>

@@ -115,10 +115,11 @@ public class AdFragment extends Fragment {
             }
         });
 
-        AdSettings.addTestDevice(Config.FB_NATIVE_AD_PLACEMENT_ID);
+//        AdSettings.addTestDevice(Config.FB_ADS_REAL_ID);
+//        AdSettings.addTestDevice(Config.FB_NATIVE_AD_PLACEMENT_ID);
 
-//        AdSettings.addTestDevice("HASHED_ID");
-//      AdSettings.addTestDevice(Config.FB_AD_HASHED_ID);
+        AdSettings.addTestDevice("964fa684eafceff785cedec5cdc5b2b7");
+//      AdSettings.addTestDevice(Config.FB_NATIVE_AD_PLACEMENT_ID);
 
         nativeAd.loadAd();
     }
