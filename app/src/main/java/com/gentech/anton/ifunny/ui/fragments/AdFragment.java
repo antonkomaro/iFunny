@@ -123,7 +123,7 @@ public class AdFragment extends Fragment {
             }
         });
 
-        AdSettings.addTestDevice(fbAdId);
+        AdSettings.addTestDevice(Config.FB_AD_HASHED_ID);
 
         nativeAd.loadAd();
     }

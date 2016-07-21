@@ -20,5 +20,7 @@ public interface Config {
 
     int AD_FREQUENCY = 5;
 
+    int PORTAL_DEMO = 8;
+    int PORTAL_PROD = 10;
 
 }

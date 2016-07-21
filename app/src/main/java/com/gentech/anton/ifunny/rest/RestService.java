@@ -7,6 +7,7 @@ import com.squareup.okhttp.ResponseBody;
 import java.util.List;
 
 import retrofit.http.GET;
+import retrofit.http.Path;
 import retrofit.http.Query;
 import rx.Observable;
 
@@ -20,11 +21,11 @@ public interface RestService {
 
     String YT_IMAGE_ENDPOINT = "http://img.youtube.com/vi/";
 
-    @GET("posts/10")
-    Observable<List<BaseModel>> loadData(@Query("offset") int offset, @Query("limit") int limit);
+    @GET("posts/{portal}")
+    Observable<List<BaseModel>> loadData(@Path("portal") int portal, @Query("offset") int offset, @Query("limit") int limit);
 
-    @GET("registration")
-    Observable<TokenModel> getAccessToken(@Query("User-agent") String userAgent);
+//    @GET("registration")
+//    Observable<TokenModel> getAccessToken(@Query("User-agent") String userAgent);
 
     @GET("counters/set")
     Observable<ResponseBody> postLike(@Query("marker") String marker);

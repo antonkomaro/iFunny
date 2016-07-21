@@ -32,7 +32,10 @@ import static com.gentech.anton.ifunny.utils.ContentType.IMAGE;
  */
 public class ContentPresenter {
     public static final String TAG = ContentPresenter.class.getSimpleName();
+    private String endPoint;
+    private int portal;
 
+    private Context context;
     private UpdateListener updateListener;
     private ActionsListener actionsListener;
 
@@ -41,33 +44,35 @@ public class ContentPresenter {
 
     public ContentPresenter(ActionsListener actionsListener,  Context context) {
         this.actionsListener = actionsListener;
-        String endPoint = setEndPoint(context);
+        this.context = context;
+        setEndPoint(context);
         service = ServiceFactory.createRestService(RestService.class, endPoint);
     }
 
     public ContentPresenter(UpdateListener updateListener, Context context) {
         this.updateListener = updateListener;
-        String endPoint = setEndPoint(context);
+        this.context = context;
+        setEndPoint(context);
         service = ServiceFactory.createRestService(RestService.class, endPoint);
     }
 
     @NonNull
-    private String setEndPoint(Context context) {
-        String endPoint;
+    private void setEndPoint(Context context) {
+
         if (context.getResources().getBoolean(R.bool.debug)) {
             endPoint = RestService.SERVICE_ENDPOINT_DEMO;
+            portal = Config.PORTAL_DEMO;
         } else {
             endPoint = RestService.SERVICE_ENDPOINT_PROD;
+            portal = Config.PORTAL_PROD;
         }
-        return endPoint;
     }
 
     public void loadData(int itemsCount) {
         int limit = Config.LIMIT;
         int offset = itemsCount == 0 ? Config.OFFSET : itemsCount;
 
-
-        service.loadData(offset, limit)
+        service.loadData(portal, offset, limit)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(throwable -> Log.e(TAG, throwable.getLocalizedMessage()))
