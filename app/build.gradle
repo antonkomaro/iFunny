@@ -1,10 +1,23 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+def keystoreProperties = new Properties()
+
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
+    signingConfigs {
+        config {
+            keyAlias 'androidks'
+            keyPassword 'ak221188'
+            storeFile file('/home/anton/keystores/android.jks')
+            storePassword 'ak221188'
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
-
     defaultConfig {
         applicationId "com.gentech.anton.ifunny"
         minSdkVersion 15
@@ -13,10 +26,20 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        debug {
+            ext.enableCrashlytics = false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlignEnabled true
+            resValue "bool", "debug", "true"
+        }
         release {
             debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlignEnabled true
+            resValue "bool", "debug", "false"
+            signingConfig signingConfigs.config
         }
     }
     compileOptions {
@@ -26,7 +49,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.1.0'
     compile 'com.android.support:cardview-v7:24.1.0'

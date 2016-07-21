@@ -1,9 +1,11 @@
 package com.gentech.anton.ifunny.presenters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.interfaces.ActionsListener;
 import com.gentech.anton.ifunny.interfaces.UpdateListener;
 import com.gentech.anton.ifunny.models.Content;
@@ -37,14 +39,27 @@ public class ContentPresenter {
     private RestService service;
     private ArrayList<Content> contentItems;
 
-    public ContentPresenter(ActionsListener actionsListener) {
+    public ContentPresenter(ActionsListener actionsListener,  Context context) {
         this.actionsListener = actionsListener;
-        service = ServiceFactory.createRestService(RestService.class, RestService.SERVICE_ENDPOINT);
+        String endPoint = setEndPoint(context);
+        service = ServiceFactory.createRestService(RestService.class, endPoint);
     }
 
-    public ContentPresenter(UpdateListener updateListener) {
+    public ContentPresenter(UpdateListener updateListener, Context context) {
         this.updateListener = updateListener;
-        service = ServiceFactory.createRestService(RestService.class, RestService.SERVICE_ENDPOINT);
+        String endPoint = setEndPoint(context);
+        service = ServiceFactory.createRestService(RestService.class, endPoint);
+    }
+
+    @NonNull
+    private String setEndPoint(Context context) {
+        String endPoint;
+        if (context.getResources().getBoolean(R.bool.debug)) {
+            endPoint = RestService.SERVICE_ENDPOINT_DEMO;
+        } else {
+            endPoint = RestService.SERVICE_ENDPOINT_PROD;
+        }
+        return endPoint;
     }
 
     public void loadData(int itemsCount) {
@@ -86,7 +101,7 @@ public class ContentPresenter {
         List<Fragment> fragments = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
 
-            if (i % Config.AD_FREQUENCY == 0 && i!=0) {
+            if (i % Config.AD_FREQUENCY == 0 && i != 0) {
                 Fragment fragment = new AdFragment();
                 fragments.add(fragment);
             }

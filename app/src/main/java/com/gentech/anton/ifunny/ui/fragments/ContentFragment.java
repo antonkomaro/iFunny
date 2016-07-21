@@ -51,7 +51,7 @@ public abstract class ContentFragment extends Fragment implements ActionsListene
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.presenter = new ContentPresenter(this);
+        this.presenter = new ContentPresenter(this, getContext());
         setRetainInstance(true);
     }
 

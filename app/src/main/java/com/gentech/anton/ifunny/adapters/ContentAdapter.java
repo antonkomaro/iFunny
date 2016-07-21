@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by anton on 12.07.16.
  */
-public class ContentAdapter extends FragmentPagerAdapter {
+public class ContentAdapter extends FragmentStatePagerAdapter {
     public static final String TAG = ContentAdapter.class.getSimpleName();
 
     private List<Fragment> fragments;
@@ -40,17 +40,6 @@ public class ContentAdapter extends FragmentPagerAdapter {
         fragments.addAll(elements);
         notifyDataSetChanged();
         Log.d(TAG, "cc addAll fragments size: " + (fragments.size()));
-    }
-
-    @Override
-    public void destroyItem(android.view.ViewGroup aContainer, int aPosition, java.lang.Object aObject)
-    {
-        if (aPosition <= getCount() && aObject != null)
-        {
-            FragmentTransaction trans = fragmentManager.beginTransaction();
-            trans.remove((Fragment) aObject);
-            trans.commit();
-        }
     }
 
 }

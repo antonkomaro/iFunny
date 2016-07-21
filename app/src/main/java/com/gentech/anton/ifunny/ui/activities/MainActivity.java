@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements UpdateListener, V
         setContentView(R.layout.activity_main);
         ButterKnife.bind(MainActivity.this);
 
-        this.presenter = new ContentPresenter(this);
+        this.presenter = new ContentPresenter(this, this);
 
         setSupportActionBar(toolbar);
 

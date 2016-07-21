@@ -21,7 +21,6 @@ import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
 import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.presenters.AnalyticsPresenter;
-import com.gentech.anton.ifunny.ui.activities.MainActivity;
 import com.gentech.anton.ifunny.utils.Config;
 
 import butterknife.Bind;
@@ -58,10 +57,18 @@ public class AdFragment extends Fragment {
 
     AdChoicesView adChoicesView;
 
+    private String fbAdId = "";
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
+        if (getResources().getBoolean(R.bool.debug)) {
+            fbAdId = Config.FB_NATIVE_AD_DEBUG_ID;
+        } else {
+            fbAdId = Config.FB_NATIVE_AD_RELEASE_ID;
+        }
     }
 
     @Nullable
@@ -74,7 +81,8 @@ public class AdFragment extends Fragment {
     }
 
     private void showNativeAd(){
-        nativeAd = new NativeAd(getContext(), Config.FB_ADS_REAL_ID);
+        Log.d(TAG, "showNativeAd fbAdId " + fbAdId);
+        nativeAd = new NativeAd(getContext(), fbAdId);
         nativeAd.setAdListener(new AdListener() {
 
             @Override
@@ -115,11 +123,7 @@ public class AdFragment extends Fragment {
             }
         });
 
-//        AdSettings.addTestDevice(Config.FB_ADS_REAL_ID);
-        AdSettings.addTestDevice(Config.FB_NATIVE_AD_PLACEMENT_ID);
-
-        AdSettings.addTestDevice("964fa684eafceff785cedec5cdc5b2b7");
-//      AdSettings.addTestDevice(Config.FB_NATIVE_AD_PLACEMENT_ID);
+        AdSettings.addTestDevice(fbAdId);
 
         nativeAd.loadAd();
     }
