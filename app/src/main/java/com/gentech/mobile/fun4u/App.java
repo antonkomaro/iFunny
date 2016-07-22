@@ -7,8 +7,6 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.gentech.anton.ifunny.BuildConfig;
-import com.gentech.anton.ifunny.R;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
@@ -57,8 +55,6 @@ public class App extends Application {
                 .build();
 
         Fabric.with(this, crashlyticsKit);
-
-
     }
 
     public static void forceTestCrash() {

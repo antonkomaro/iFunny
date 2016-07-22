@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.gentech.anton.ifunny.R;
+import com.gentech.mobile.fun4u.R;
 import com.gentech.mobile.fun4u.adapters.ContentAdapter;
 import com.gentech.mobile.fun4u.interfaces.UpdateListener;
 import com.gentech.mobile.fun4u.models.Content;
@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements UpdateListener, V
 
     @Override
     public void onPageSelected(int position) {
+        presenter.postView(String.valueOf(adapter.getItem(position).getId()));
         int count = adapter.getCount();
         if (position == count - 1) {
             presenter.loadData(count);

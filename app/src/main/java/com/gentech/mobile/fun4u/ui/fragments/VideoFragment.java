@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.gentech.anton.ifunny.R;
+import com.gentech.mobile.fun4u.R;
 import com.gentech.mobile.fun4u.models.Content;
 import com.gentech.mobile.fun4u.rest.RestService;
 import com.gentech.mobile.fun4u.utils.Config;

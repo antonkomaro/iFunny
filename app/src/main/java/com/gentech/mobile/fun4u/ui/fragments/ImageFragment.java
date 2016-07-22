@@ -8,9 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.gentech.anton.ifunny.R;
+import com.gentech.mobile.fun4u.R;
 import com.gentech.mobile.fun4u.models.Content;
-import com.gentech.mobile.fun4u.presenters.ContentPresenter;
 import com.gentech.mobile.fun4u.utils.Config;
 
 import butterknife.Bind;

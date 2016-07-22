@@ -11,7 +11,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gentech.anton.ifunny.R;
+
+import com.gentech.mobile.fun4u.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

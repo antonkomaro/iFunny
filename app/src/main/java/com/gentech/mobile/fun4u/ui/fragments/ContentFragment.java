@@ -10,8 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.gentech.anton.ifunny.R;
-import com.gentech.mobile.fun4u.App;
+import com.gentech.mobile.fun4u.R;
 import com.gentech.mobile.fun4u.interfaces.ActionsListener;
 import com.gentech.mobile.fun4u.models.Content;
 import com.gentech.mobile.fun4u.presenters.AnalyticsPresenter;
@@ -90,6 +89,7 @@ public abstract class ContentFragment extends Fragment implements ActionsListene
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
             sendIntent.putExtra(Intent.EXTRA_TEXT, contentUrl);
+
             sendIntent.setType("text/plain");
             startActivity(Intent.createChooser(sendIntent,
                     getResources().getText(R.string.send_to)));

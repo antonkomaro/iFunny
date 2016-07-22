@@ -32,6 +32,10 @@ public interface RestService {
     @GET("counters/get")
     Observable<ResponseBody> getLikes(@Query("marker") String marker);
 
+    @GET("counters/set")
+    Observable<ResponseBody> postView(@Query("marker") String marker);
+
+
 
 }
 

@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
-import com.gentech.anton.ifunny.R;
+import com.gentech.mobile.fun4u.R;
 import com.gentech.mobile.fun4u.interfaces.ActionsListener;
 import com.gentech.mobile.fun4u.interfaces.UpdateListener;
 import com.gentech.mobile.fun4u.models.Content;
@@ -122,9 +122,14 @@ public class ContentPresenter {
         List<Fragment> fragments = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
 
-            if (i % Config.AD_FREQUENCY == 0 && i != 0) {
+
+
+            Log.d(TAG, "bf i " + i);
+            Log.d(TAG, "bf i % Config.AD_FREQUENCY " + (i % Config.AD_FREQUENCY));
+            if (i % Config.AD_FREQUENCY == 1) {
                 Fragment fragment = new AdFragment();
                 fragments.add(fragment);
+                Log.d(TAG, "bf fragment " + fragment);
             }
 
             Fragment fragment;
@@ -193,6 +198,32 @@ public class ContentPresenter {
                     @Override
                     public void onNext(ResponseBody likesCount) {
                         actionsListener.updateLikes(likesCount);
+                    }
+                });
+        AnalyticsPresenter.getInstance().sendAnalyticsEvent(
+                TAG, AnalyticsPresenter.CATEGORY_POST_ACTIONS, AnalyticsPresenter.ACTION_POST_LIKED);
+    }
+
+    public void postView(String contentId) {
+        String marker = "views_post_id_" + contentId;
+        service.postView(marker)
+                .doOnError(t -> Log.e(TAG, "Error posting view " + t.getLocalizedMessage()))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ResponseBody>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        onLoadError(e);
+                    }
+
+                    @Override
+                    public void onNext(ResponseBody views) {
+                        Log.d(TAG, "Updated views counter of post " + contentId);
                     }
                 });
         AnalyticsPresenter.getInstance().sendAnalyticsEvent(

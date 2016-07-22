@@ -24,4 +24,8 @@ public interface Config {
     int PORTAL_DEMO = 8;
     int PORTAL_PROD = 10;
 
+    String SHARE_MSG = "Get fun with Fun4U App! Install for Free "
+            + "https://play.google.com/store/apps/details?id=com.gentech.mobile.fun4u";
+
+
 }

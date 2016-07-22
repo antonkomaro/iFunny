@@ -19,7 +19,7 @@ import com.facebook.ads.AdListener;
 import com.facebook.ads.AdSettings;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
-import com.gentech.anton.ifunny.R;
+import com.gentech.mobile.fun4u.R;
 import com.gentech.mobile.fun4u.presenters.AnalyticsPresenter;
 import com.gentech.mobile.fun4u.utils.Config;
 
@@ -87,7 +87,7 @@ public class AdFragment extends Fragment {
 
             @Override
             public void onError(Ad ad, AdError error) {
-                Log.e(TAG, "onError " + error);
+                Log.e(TAG, "onError " + error.getErrorCode());
             }
 
             @Override
@@ -123,7 +123,7 @@ public class AdFragment extends Fragment {
             }
         });
 
-//        AdSettings.addTestDevice(Config.FB_AD_HASHED_ID);
+        AdSettings.addTestDevice("HASHED_ID");
 
         nativeAd.loadAd();
     }
