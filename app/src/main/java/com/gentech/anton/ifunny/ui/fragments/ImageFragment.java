@@ -38,6 +38,7 @@ public class ImageFragment extends ContentFragment {
     }
 
     protected void loadContent() {
+        super.loadContent();
         ivContent.setImageURI(Uri.parse(getContent().getUrl()));
         tvContent.setText(getContent().getTitle());
 

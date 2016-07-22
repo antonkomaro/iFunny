@@ -11,12 +11,14 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.gentech.anton.ifunny.App;
 import com.gentech.anton.ifunny.R;
 import com.gentech.anton.ifunny.interfaces.ActionsListener;
 import com.gentech.anton.ifunny.models.Content;
 import com.gentech.anton.ifunny.presenters.AnalyticsPresenter;
 import com.gentech.anton.ifunny.presenters.ContentPresenter;
 import com.gentech.anton.ifunny.utils.Config;
+import com.gentech.anton.ifunny.utils.Utils;
 import com.squareup.okhttp.ResponseBody;
 
 import java.io.IOException;
@@ -77,7 +79,11 @@ public abstract class ContentFragment extends Fragment implements ActionsListene
         btnLike.setOnClickListener(view -> presenter.postLike(getContent().getId()));
     }
 
-    protected abstract void loadContent();
+    protected void loadContent(){
+        if (!Utils.isOnline(getContext())) {
+            Utils.askToTurnOnInternet(getContext());
+        }
+    }
 
     protected void setupShare(String contentUrl) {
         btnShare.setOnClickListener(view -> {

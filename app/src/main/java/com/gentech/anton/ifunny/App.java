@@ -1,23 +1,20 @@
 package com.gentech.anton.ifunny;
 
 import android.app.Application;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
-import android.support.v7.app.AlertDialog;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.gentech.anton.ifunny.models.Content;
-import com.gentech.anton.ifunny.utils.Utils;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by anton on 13.07.16.
  */
-public class IFunnyApp extends Application {
-    public static final String TAG = IFunnyApp.class.getSimpleName();
+public class App extends Application {
+    public static final String TAG = App.class.getSimpleName();
 
     public static Tracker tracker;
 
@@ -34,6 +31,7 @@ public class IFunnyApp extends Application {
 
     private void initAnalytics() {
         initGoogleAnalytics();
+        initCrashlytics();
     }
 
     private void initGoogleAnalytics() {
@@ -43,4 +41,17 @@ public class IFunnyApp extends Application {
         tracker.enableAdvertisingIdCollection(true);
     }
 
+    private void initCrashlytics() {
+        Crashlytics crashlyticsKit = new Crashlytics.Builder()
+                .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+                .build();
+
+        Fabric.with(this, crashlyticsKit);
+
+
+    }
+
+    public static void forceTestCrash() {
+        throw new RuntimeException("This is a crash");
+    }
 }

@@ -32,7 +32,7 @@ import butterknife.Bind;
 /**
  * Created by anton on 13.07.16.
  */
-public class VideoFragment extends ContentFragment implements YouTubeThumbnailView.OnInitializedListener {
+public class VideoFragment extends ContentFragment {
     public static final String TAG = VideoFragment.class.getSimpleName();
 
     @Bind(R.id.tv_content)
@@ -56,6 +56,7 @@ public class VideoFragment extends ContentFragment implements YouTubeThumbnailVi
 
 
     protected void loadContent() {
+        super.loadContent();
         tvContent.setText(getContent().getTitle());
 
         String videoId = Utils.getYoutubeVideoIdFromUrl(getContent().getUrl());
@@ -87,13 +88,4 @@ public class VideoFragment extends ContentFragment implements YouTubeThumbnailVi
         return resolveInfo != null && !resolveInfo.isEmpty();
     }
 
-    @Override
-    public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader youTubeThumbnailLoader) {
-
-    }
-
-    @Override
-    public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-
-    }
 }

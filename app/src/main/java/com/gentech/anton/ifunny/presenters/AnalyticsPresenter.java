@@ -2,7 +2,7 @@ package com.gentech.anton.ifunny.presenters;
 
 import android.util.Log;
 
-import com.gentech.anton.ifunny.IFunnyApp;
+import com.gentech.anton.ifunny.App;
 import com.google.android.gms.analytics.HitBuilders;
 
 public class AnalyticsPresenter {
@@ -34,8 +34,8 @@ public class AnalyticsPresenter {
     }
 
     private void sendGoogleAnalyticsEvent(String screenName, String category, String action, String label) {
-        IFunnyApp.tracker().setScreenName(screenName);
-        IFunnyApp.tracker().send(new HitBuilders.EventBuilder()
+        App.tracker().setScreenName(screenName);
+        App.tracker().send(new HitBuilders.EventBuilder()
                 .setCategory(category)
                 .setAction(action)
                 .setLabel(label)

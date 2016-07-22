@@ -18,11 +18,16 @@ import com.gentech.anton.ifunny.ui.fragments.ImageFragment;
 import com.gentech.anton.ifunny.ui.fragments.VideoFragment;
 import com.gentech.anton.ifunny.utils.Config;
 import com.gentech.anton.ifunny.utils.ContentType;
+import com.gentech.anton.ifunny.utils.Utils;
+import com.squareup.okhttp.ResponseBody;
+import com.squareup.okhttp.internal.Util;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import static com.gentech.anton.ifunny.utils.ContentType.IMAGE;
@@ -76,10 +81,23 @@ public class ContentPresenter {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(throwable -> Log.e(TAG, throwable.getLocalizedMessage()))
-                .subscribe(baseModels -> {
-                    if (baseModels != null && !baseModels.isEmpty()) {
-                        contentItems = (ArrayList<Content>) parseData(baseModels);
-                        updateListener.updateAdapter(contentItems);
+                .subscribe(new Subscriber<List<BaseModel>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        onLoadError(e);
+                    }
+
+                    @Override
+                    public void onNext(List<BaseModel> baseModels) {
+                        if (baseModels != null && !baseModels.isEmpty()) {
+                            contentItems = (ArrayList<Content>) ContentPresenter.this.parseData(baseModels);
+                            updateListener.updateAdapter(contentItems);
+                        }
                     }
                 });
     }
@@ -139,8 +157,21 @@ public class ContentPresenter {
                         -> Log.e(TAG, "Error getting likes count " + t.getLocalizedMessage()))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((likesCount) -> {
-                    actionsListener.updateLikes(likesCount);
+                .subscribe(new Subscriber<ResponseBody>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        onLoadError(e);
+                    }
+
+                    @Override
+                    public void onNext(ResponseBody likesCount) {
+                        actionsListener.updateLikes(likesCount);
+                    }
                 });
     }
 
@@ -150,10 +181,30 @@ public class ContentPresenter {
                 .doOnError(t -> Log.e(TAG, "Error posting like " + t.getLocalizedMessage()))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((likesCount) -> {
-                    actionsListener.updateLikes(likesCount);
+                .subscribe(new Subscriber<ResponseBody>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        onLoadError(e);
+                    }
+
+                    @Override
+                    public void onNext(ResponseBody likesCount) {
+                        actionsListener.updateLikes(likesCount);
+                    }
                 });
         AnalyticsPresenter.getInstance().sendAnalyticsEvent(
                 TAG, AnalyticsPresenter.CATEGORY_POST_ACTIONS, AnalyticsPresenter.ACTION_POST_LIKED);
     }
+
+    private void onLoadError(Throwable e) {
+        if (!Utils.isOnline(context)) {
+            Utils.askToTurnOnInternet(context);
+        }
+    }
+
 }

@@ -41,6 +41,7 @@ public class GifFragment extends ContentFragment {
 
     @Override
     protected void loadContent() {
+        super.loadContent();
         tvContent.setText(getContent().getTitle());
 
         DraweeController controller = Fresco.newDraweeControllerBuilder()
