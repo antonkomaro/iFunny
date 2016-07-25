@@ -64,11 +64,11 @@ public class AdFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-        if (getResources().getBoolean(R.bool.debug)) {
-            fbAdId = Config.FB_NATIVE_AD_DEBUG_ID;
-        } else {
+//        if (getResources().getBoolean(R.bool.debug)) {
+//            fbAdId = Config.FB_NATIVE_AD_DEBUG_ID;
+//        } else {
             fbAdId = Config.FB_NATIVE_AD_RELEASE_ID;
-        }
+//        }
     }
 
     @Nullable
@@ -123,7 +123,7 @@ public class AdFragment extends Fragment {
             }
         });
 
-        AdSettings.addTestDevice("HASHED_ID");
+        AdSettings.addTestDevice(Config.FB_AD_HASHED_ID);
 
         nativeAd.loadAd();
     }
