@@ -32,14 +32,8 @@ public class App extends Application {
     }
 
     private void initAnalytics() {
-//        initFacebook();
         initGoogleAnalytics();
         initCrashlytics();
-    }
-
-    private void initFacebook() {
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
     }
 
     private void initGoogleAnalytics() {

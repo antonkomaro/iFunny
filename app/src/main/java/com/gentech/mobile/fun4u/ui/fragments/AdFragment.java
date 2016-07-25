@@ -59,7 +59,6 @@ public class AdFragment extends Fragment {
     AdChoicesView adChoicesView;
 
     private String fbAdId = "";
-    private boolean isAdLoaded;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,12 +71,7 @@ public class AdFragment extends Fragment {
     }
 
     public static Fragment newInstance() {
-        AdFragment fragment = new AdFragment();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("isAdLoaded", false);
-        fragment.setArguments(bundle);
-
-        return fragment;
+        return new AdFragment();
     }
 
     @Nullable
@@ -92,7 +86,6 @@ public class AdFragment extends Fragment {
     }
 
     private void showNativeAd() {
-        Log.d(TAG, "showNativeAd fbAdId " + fbAdId);
         nativeAd = new NativeAd(getContext(), fbAdId);
         nativeAd.setAdListener(new AdListener() {
 
@@ -120,11 +113,6 @@ public class AdFragment extends Fragment {
                 }
 
                 nativeAd.registerViewForInteraction(adView);
-
-                Log.d(TAG, "ccf putBoolean true");
-                getArguments().putBoolean("isAdLoaded", true);
-
-//                isAdLoaded = true;
             }
 
             @Override
@@ -138,13 +126,5 @@ public class AdFragment extends Fragment {
 
         AdSettings.addTestDevice(Config.FB_AD_HASHED_ID);
     }
-
-    public boolean isAdLoaded() {
-      return  getArguments().getBoolean("isAdLoaded", false);
-//        return isAdLoaded;
-
-//        return  nativeAd!=null;
-    }
-
 
 }

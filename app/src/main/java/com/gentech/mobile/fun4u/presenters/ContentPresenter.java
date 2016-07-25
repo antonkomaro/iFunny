@@ -5,6 +5,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.AdListener;
+import com.facebook.ads.NativeAd;
 import com.gentech.mobile.fun4u.R;
 import com.gentech.mobile.fun4u.interfaces.ActionsListener;
 import com.gentech.mobile.fun4u.interfaces.UpdateListener;
@@ -118,11 +122,11 @@ public class ContentPresenter {
         return data;
     }
 
-    public List<Fragment> buildFragments(List<Content> data) {
+    public List<Fragment> buildFragments(List<Content> data, boolean isAdValid) {
         List<Fragment> fragments = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
 
-            if (i % Config.AD_FREQUENCY == 1) {
+            if (i % Config.AD_FREQUENCY == 1 && isAdValid) {
                 Fragment fragment = AdFragment.newInstance();
                 fragments.add(fragment);
             }

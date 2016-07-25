@@ -1,15 +1,18 @@
 package com.gentech.mobile.fun4u.ui.activities;
 
 
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
 import com.facebook.FacebookSdk;
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.AdListener;
+import com.facebook.ads.AdSettings;
+import com.facebook.ads.NativeAd;
 import com.facebook.appevents.AppEventsLogger;
 import com.gentech.mobile.fun4u.R;
 import com.gentech.mobile.fun4u.adapters.ContentAdapter;
@@ -17,7 +20,6 @@ import com.gentech.mobile.fun4u.interfaces.UpdateListener;
 import com.gentech.mobile.fun4u.models.Content;
 import com.gentech.mobile.fun4u.presenters.ContentPresenter;
 
-import com.gentech.mobile.fun4u.ui.fragments.AdFragment;
 import com.gentech.mobile.fun4u.utils.Config;
 import com.gentech.mobile.fun4u.utils.Utils;
 
@@ -30,8 +32,6 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements UpdateListener, ViewPager.OnPageChangeListener{
     public static final String TAG = MainActivity.class.getSimpleName();
-
-//    private EventBus eventBus = EventBus.getDefault();
 
     private ContentPresenter presenter;
 
@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements UpdateListener, V
 
     @Override
     protected void onDestroy() {
-//        eventBus.unregister(this);
         super.onDestroy();
     }
 
@@ -59,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements UpdateListener, V
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(MainActivity.this);
-//        eventBus.register(this);
 
         this.presenter = new ContentPresenter(this, this);
 
@@ -105,31 +103,31 @@ public class MainActivity extends AppCompatActivity implements UpdateListener, V
     public void updateAdapter(List<Content> contentItems) {
         this.contentItems = (ArrayList<Content>) contentItems;
         if (contentItems != null && !contentItems.isEmpty()) {
-            List<Fragment> fragments = presenter.buildFragments(contentItems);
 
-            List<Fragment> checkedFragments = new ArrayList<>();
-            for (Fragment fragment : fragments) {
-                if (fragment instanceof AdFragment) {
-                    AdFragment frag = (AdFragment) fragment;
-                    boolean isAdLoaded = frag.isAdLoaded();
-                    Log.d(TAG, "ccf ccf isAdLoaded " + isAdLoaded);
-                    if (isAdLoaded) {
-                        checkedFragments.add(fragment);
-                    }
-                } else {
-                    checkedFragments.add(fragment);
-                }
-            }
-            Log.d(TAG, "ccf checkedFragments " + checkedFragments.size());
-            Log.d(TAG, "ccf fragments " + fragments.size());
-
-
-            for (Fragment cf : checkedFragments) {
-                Log.d(TAG, "cf is adfragment? " + (cf instanceof AdFragment));
-            }
-
-            adapter.addAll(checkedFragments);
+            checkAdAndBuildFragments();
         }
+    }
+
+    private void checkAdAndBuildFragments() {
+        AdSettings.addTestDevice(Config.FB_AD_HASHED_ID);
+        NativeAd nativeAd = new NativeAd(this, Config.FB_PLACEMENT_ID);
+        nativeAd.setAdListener(new AdListener() {
+            @Override
+            public void onError(Ad ad, AdError adError) {
+                adapter.addAll(presenter.buildFragments(contentItems, false));
+            }
+
+            @Override
+            public void onAdLoaded(Ad ad) {
+                adapter.addAll(presenter.buildFragments(contentItems, true));
+            }
+
+            @Override
+            public void onAdClicked(Ad ad) {
+                //do nothing
+            }
+        });
+        nativeAd.loadAd();
     }
 
     private void loadData() {
