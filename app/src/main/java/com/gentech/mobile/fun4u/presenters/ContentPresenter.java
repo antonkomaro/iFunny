@@ -122,14 +122,9 @@ public class ContentPresenter {
         List<Fragment> fragments = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
 
-
-
-            Log.d(TAG, "bf i " + i);
-            Log.d(TAG, "bf i % Config.AD_FREQUENCY " + (i % Config.AD_FREQUENCY));
             if (i % Config.AD_FREQUENCY == 1) {
-                Fragment fragment = new AdFragment();
+                Fragment fragment = AdFragment.newInstance();
                 fragments.add(fragment);
-                Log.d(TAG, "bf fragment " + fragment);
             }
 
             Fragment fragment;

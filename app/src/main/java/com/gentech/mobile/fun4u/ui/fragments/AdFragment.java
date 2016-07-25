@@ -20,6 +20,7 @@ import com.facebook.ads.AdSettings;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
 import com.gentech.mobile.fun4u.R;
+import com.gentech.mobile.fun4u.models.Content;
 import com.gentech.mobile.fun4u.presenters.AnalyticsPresenter;
 import com.gentech.mobile.fun4u.utils.Config;
 
@@ -58,17 +59,25 @@ public class AdFragment extends Fragment {
     AdChoicesView adChoicesView;
 
     private String fbAdId = "";
+    private boolean isAdLoaded;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-//        if (getResources().getBoolean(R.bool.debug)) {
-//            fbAdId = Config.FB_NATIVE_AD_DEBUG_ID;
-//        } else {
-            fbAdId = Config.FB_NATIVE_AD_RELEASE_ID;
-//        }
+        fbAdId = Config.FB_PLACEMENT_ID;
+
+        showNativeAd();
+    }
+
+    public static Fragment newInstance() {
+        AdFragment fragment = new AdFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isAdLoaded", false);
+        fragment.setArguments(bundle);
+
+        return fragment;
     }
 
     @Nullable
@@ -76,11 +85,13 @@ public class AdFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ad, container, false);
         ButterKnife.bind(this, rootView);
-        showNativeAd();
+
+        nativeAd.loadAd();
+
         return rootView;
     }
 
-    private void showNativeAd(){
+    private void showNativeAd() {
         Log.d(TAG, "showNativeAd fbAdId " + fbAdId);
         nativeAd = new NativeAd(getContext(), fbAdId);
         nativeAd.setAdListener(new AdListener() {
@@ -92,9 +103,6 @@ public class AdFragment extends Fragment {
 
             @Override
             public void onAdLoaded(Ad ad) {
-                if (ad != nativeAd) {
-                    return;
-                }
 
                 nativeAdSocialContext.setText(nativeAd.getAdSocialContext());
                 nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
@@ -112,6 +120,11 @@ public class AdFragment extends Fragment {
                 }
 
                 nativeAd.registerViewForInteraction(adView);
+
+                Log.d(TAG, "ccf putBoolean true");
+                getArguments().putBoolean("isAdLoaded", true);
+
+//                isAdLoaded = true;
             }
 
             @Override
@@ -124,8 +137,14 @@ public class AdFragment extends Fragment {
         });
 
         AdSettings.addTestDevice(Config.FB_AD_HASHED_ID);
-
-        nativeAd.loadAd();
     }
+
+    public boolean isAdLoaded() {
+      return  getArguments().getBoolean("isAdLoaded", false);
+//        return isAdLoaded;
+
+//        return  nativeAd!=null;
+    }
+
 
 }

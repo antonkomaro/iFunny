@@ -6,14 +6,18 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.gentech.mobile.fun4u.R;
 import com.gentech.mobile.fun4u.adapters.ContentAdapter;
 import com.gentech.mobile.fun4u.interfaces.UpdateListener;
 import com.gentech.mobile.fun4u.models.Content;
 import com.gentech.mobile.fun4u.presenters.ContentPresenter;
 
+import com.gentech.mobile.fun4u.ui.fragments.AdFragment;
 import com.gentech.mobile.fun4u.utils.Config;
 import com.gentech.mobile.fun4u.utils.Utils;
 
@@ -49,6 +53,9 @@ public class MainActivity extends AppCompatActivity implements UpdateListener, V
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(MainActivity.this);
@@ -99,7 +106,29 @@ public class MainActivity extends AppCompatActivity implements UpdateListener, V
         this.contentItems = (ArrayList<Content>) contentItems;
         if (contentItems != null && !contentItems.isEmpty()) {
             List<Fragment> fragments = presenter.buildFragments(contentItems);
-            adapter.addAll(fragments);
+
+            List<Fragment> checkedFragments = new ArrayList<>();
+            for (Fragment fragment : fragments) {
+                if (fragment instanceof AdFragment) {
+                    AdFragment frag = (AdFragment) fragment;
+                    boolean isAdLoaded = frag.isAdLoaded();
+                    Log.d(TAG, "ccf ccf isAdLoaded " + isAdLoaded);
+                    if (isAdLoaded) {
+                        checkedFragments.add(fragment);
+                    }
+                } else {
+                    checkedFragments.add(fragment);
+                }
+            }
+            Log.d(TAG, "ccf checkedFragments " + checkedFragments.size());
+            Log.d(TAG, "ccf fragments " + fragments.size());
+
+
+            for (Fragment cf : checkedFragments) {
+                Log.d(TAG, "cf is adfragment? " + (cf instanceof AdFragment));
+            }
+
+            adapter.addAll(checkedFragments);
         }
     }
 
@@ -126,8 +155,5 @@ public class MainActivity extends AppCompatActivity implements UpdateListener, V
         }
     }
 
-//    public void onEventMainThread(ConnectionChangeEvent event){
-//       loadData();
-//    }
 
 }

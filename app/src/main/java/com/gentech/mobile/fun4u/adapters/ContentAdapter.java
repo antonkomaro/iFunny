@@ -15,11 +15,9 @@ public class ContentAdapter extends FragmentStatePagerAdapter {
     public static final String TAG = ContentAdapter.class.getSimpleName();
 
     private List<Fragment> fragments;
-    private FragmentManager fragmentManager;
 
     public ContentAdapter(FragmentManager fm) {
         super(fm);
-        this.fragmentManager = fm;
         fragments = new ArrayList<>();
     }
 
@@ -34,10 +32,8 @@ public class ContentAdapter extends FragmentStatePagerAdapter {
     }
 
     public void addAll(List<Fragment> elements) {
-        Log.d(TAG, "cc elements " + elements);
         fragments.addAll(elements);
         notifyDataSetChanged();
-        Log.d(TAG, "cc addAll fragments size: " + (fragments.size()));
     }
 
 }

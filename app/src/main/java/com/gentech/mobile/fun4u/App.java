@@ -32,7 +32,7 @@ public class App extends Application {
     }
 
     private void initAnalytics() {
-        initFacebook();
+//        initFacebook();
         initGoogleAnalytics();
         initCrashlytics();
     }
