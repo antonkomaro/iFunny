@@ -81,7 +81,12 @@ public abstract class ContentFragment extends Fragment implements ActionsListene
     protected void setupButtons() {
         presenter.showLikes(getContent().getId());
         setupShare(getContent().getUrl());
-        btnLike.setOnClickListener(view -> presenter.postLike(getContent().getId()));
+        btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.postLike(ContentFragment.this.getContent().getId());
+            }
+        });
 
         setupLikeBtn(getContext(), getContent().getId());
 
@@ -96,10 +101,21 @@ public abstract class ContentFragment extends Fragment implements ActionsListene
         if (like != null && like.getIsLiked() == 1) {
             isLiked = true;
         }
-        btnLike.setActivated(!isLiked);
+
+        if (isLiked) {
+            btnLike.setClickable(false);
+            btnLike.setPressed(true);
+        } else {
+            btnLike.setClickable(true);
+            btnLike.setPressed(false);
+        }
+
+
+
+
     }
 
-    protected void loadContent(){
+    protected void loadContent() {
         if (!Utils.isOnline(getContext())) {
             Utils.askToTurnOnInternet(getContext());
         }
@@ -140,7 +156,9 @@ public abstract class ContentFragment extends Fragment implements ActionsListene
         like.setPostId(postId);
         like.setIsLiked(1);
         likeDAO.save(like);
-        Log.d(TAG, "like saved postId " + postId);
+
+        btnLike.setClickable(false);
+        btnLike.setPressed(true);
     }
 
 }

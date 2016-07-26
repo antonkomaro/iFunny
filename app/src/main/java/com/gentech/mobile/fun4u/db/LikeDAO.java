@@ -58,22 +58,22 @@ public class LikeDAO extends EntityDbDAO {
         values.put(DBHelper.POST_ID_COLUMN, like.getPostId());
         values.put(DBHelper.IS_LIKED_COLUMN, like.getIsLiked());
 
-        return database.update(DBHelper.LIKES_TABLE, values, WHERE_POST_ID_EQUALS, new String[]{like.getPostId()});
+        return database.insert(DBHelper.LIKES_TABLE, null, values);
     }
 
     public Like get(String postId) {
 
-        Like like = null;
         String sql = "SELECT * FROM " + DBHelper.LIKES_TABLE + " WHERE " + WHERE_POST_ID_EQUALS;
         Cursor cursor = database.rawQuery(sql, new String[]{postId});
 
-        Log.d(TAG, "cursor " + cursor.getCount());
-
+        Like like = null;
         if (cursor.moveToNext()) {
             like = new Like();
             like.setPostId(cursor.getString(0));
             like.setIsLiked(cursor.getInt(1));
         }
+
+        cursor.close();
 
         return like;
     }
