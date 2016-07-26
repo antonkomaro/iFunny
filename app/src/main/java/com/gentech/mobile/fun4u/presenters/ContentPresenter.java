@@ -10,6 +10,8 @@ import com.facebook.ads.AdError;
 import com.facebook.ads.AdListener;
 import com.facebook.ads.NativeAd;
 import com.gentech.mobile.fun4u.R;
+import com.gentech.mobile.fun4u.db.Like;
+import com.gentech.mobile.fun4u.db.LikeDAO;
 import com.gentech.mobile.fun4u.interfaces.ActionsListener;
 import com.gentech.mobile.fun4u.interfaces.UpdateListener;
 import com.gentech.mobile.fun4u.models.Content;
@@ -197,6 +199,7 @@ public class ContentPresenter {
                     @Override
                     public void onNext(ResponseBody likesCount) {
                         actionsListener.updateLikes(likesCount);
+                        actionsListener.saveLike(contentId);
                     }
                 });
         AnalyticsPresenter.getInstance().sendAnalyticsEvent(

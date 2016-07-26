@@ -7,4 +7,6 @@ import com.squareup.okhttp.ResponseBody;
  */
 public interface ActionsListener {
     void updateLikes(ResponseBody likesCount);
+
+    void saveLike(String postId);
 }
