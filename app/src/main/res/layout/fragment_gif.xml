@@ -13,9 +13,7 @@
         android:layout_height="match_parent"
         fresco:placeholderImage="@drawable/ph_loading"
         android:background="@null"
-        android:visibility="visible"/>
-
-    <include layout="@layout/layout_bottom_bar"/>
-
+        android:visibility="visible"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

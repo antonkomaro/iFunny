@@ -75,7 +75,7 @@ public class VideoFragment extends ContentFragment {
             }
         });
 
-        setupButtons();
+//        setupButtons();
     }
 
     private boolean canResolveIntent(Intent intent) {

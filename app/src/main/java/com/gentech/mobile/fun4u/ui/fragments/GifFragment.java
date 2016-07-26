@@ -46,7 +46,7 @@ public class GifFragment extends ContentFragment {
                 .build();
         ivContent.setController(controller);
 
-        setupButtons();
+//        setupButtons();
     }
 
     protected View inflateRootView(LayoutInflater layoutInflater, ViewGroup viewGroup) {

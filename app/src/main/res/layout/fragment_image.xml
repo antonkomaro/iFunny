@@ -14,7 +14,6 @@
         fresco:placeholderImage="@drawable/ph_loading"
         android:visibility="visible"/>
 
-    <include layout="@layout/layout_bottom_bar"/>
 
 
 </RelativeLayout>

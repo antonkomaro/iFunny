@@ -37,7 +37,7 @@ public class ImageFragment extends ContentFragment {
         ivContent.setImageURI(Uri.parse(getContent().getUrl()));
         tvContent.setText(getContent().getTitle());
 
-        setupButtons();
+//        setupButtons();
     }
 
     protected View inflateRootView(LayoutInflater layoutInflater, ViewGroup viewGroup) {

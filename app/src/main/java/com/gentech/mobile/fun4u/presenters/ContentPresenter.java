@@ -5,19 +5,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
-import com.facebook.ads.Ad;
-import com.facebook.ads.AdError;
-import com.facebook.ads.AdListener;
-import com.facebook.ads.NativeAd;
 import com.gentech.mobile.fun4u.R;
-import com.gentech.mobile.fun4u.db.Like;
-import com.gentech.mobile.fun4u.db.LikeDAO;
-import com.gentech.mobile.fun4u.interfaces.ActionsListener;
-import com.gentech.mobile.fun4u.interfaces.UpdateListener;
+import com.gentech.mobile.fun4u.interfaces.ActionCallback;
 import com.gentech.mobile.fun4u.models.Content;
 import com.gentech.mobile.fun4u.rest.RestService;
 import com.gentech.mobile.fun4u.rest.ServiceFactory;
 import com.gentech.mobile.fun4u.rest.model.BaseModel;
+import com.gentech.mobile.fun4u.ui.activities.MainActivity;
 import com.gentech.mobile.fun4u.ui.fragments.AdFragment;
 import com.gentech.mobile.fun4u.ui.fragments.GifFragment;
 import com.gentech.mobile.fun4u.ui.fragments.ImageFragment;
@@ -45,24 +39,20 @@ public class ContentPresenter {
     private int portal;
 
     private Context context;
-    private UpdateListener updateListener;
-    private ActionsListener actionsListener;
+    private ActionCallback actionCallback;
 
     private RestService service;
     private ArrayList<Content> contentItems;
 
-    public ContentPresenter(ActionsListener actionsListener,  Context context) {
-        this.actionsListener = actionsListener;
+    public ContentPresenter(ActionCallback actionCallback, Context context) {
+        this.actionCallback = actionCallback;
         this.context = context;
         setEndPoint(context);
         service = ServiceFactory.createRestService(RestService.class, endPoint);
     }
 
-    public ContentPresenter(UpdateListener updateListener, Context context) {
-        this.updateListener = updateListener;
-        this.context = context;
-        setEndPoint(context);
-        service = ServiceFactory.createRestService(RestService.class, endPoint);
+    public RestService getService() {
+        return service;
     }
 
     @NonNull
@@ -100,7 +90,7 @@ public class ContentPresenter {
                     public void onNext(List<BaseModel> baseModels) {
                         if (baseModels != null && !baseModels.isEmpty()) {
                             contentItems = (ArrayList<Content>) ContentPresenter.this.parseData(baseModels);
-                            updateListener.updateAdapter(contentItems);
+                            actionCallback.updateAdapter(contentItems);
                         }
                     }
                 });
@@ -154,7 +144,38 @@ public class ContentPresenter {
         return fragments;
     }
 
-    public void showLikes(String contentId) {
+    public void postView(String contentId) {
+        String marker = "views_post_id_" + contentId;
+        service.postView(marker)
+                .doOnError(t -> Log.e(TAG, "Error posting view " + t.getLocalizedMessage()))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ResponseBody>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        onLoadError(e);
+                    }
+
+                    @Override
+                    public void onNext(ResponseBody views) {
+                        Log.d(TAG, "Updated views counter of post " + contentId);
+                    }
+                });
+        AnalyticsPresenter.getInstance().sendAnalyticsEvent(
+                TAG, AnalyticsPresenter.CATEGORY_POST_ACTIONS, AnalyticsPresenter.ACTION_POST_LIKED);
+    }
+
+    public void onLoadError(Throwable e) {
+        if (!Utils.isOnline(context)) {
+            Utils.askToTurnOnInternet(context);
+        }
+    }
+
+    public void showLikes(String contentId, ActionCallback callback) {
         String marker = "likes_post_id_" + contentId;
         service.getLikes(marker)
                 .doOnError(t
@@ -169,17 +190,17 @@ public class ContentPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        onLoadError(e);
+                       onLoadError(e);
                     }
 
                     @Override
                     public void onNext(ResponseBody likesCount) {
-                        actionsListener.updateLikes(likesCount);
+                        callback.updateLikes(likesCount);
                     }
                 });
     }
 
-    public void postLike(String contentId) {
+    public void postLike(String contentId, ActionCallback callback) {
         String marker = "likes_post_id_" + contentId;
         service.postLike(marker)
                 .doOnError(t -> Log.e(TAG, "Error posting like " + t.getLocalizedMessage()))
@@ -198,44 +219,11 @@ public class ContentPresenter {
 
                     @Override
                     public void onNext(ResponseBody likesCount) {
-                        actionsListener.updateLikes(likesCount);
-                        actionsListener.saveLike(contentId);
+                        callback.updateLikes(likesCount);
+                        callback.saveLike(contentId);
                     }
                 });
         AnalyticsPresenter.getInstance().sendAnalyticsEvent(
                 TAG, AnalyticsPresenter.CATEGORY_POST_ACTIONS, AnalyticsPresenter.ACTION_POST_LIKED);
     }
-
-    public void postView(String contentId) {
-        String marker = "views_post_id_" + contentId;
-        service.postView(marker)
-                .doOnError(t -> Log.e(TAG, "Error posting view " + t.getLocalizedMessage()))
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ResponseBody>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        onLoadError(e);
-                    }
-
-                    @Override
-                    public void onNext(ResponseBody views) {
-                        Log.d(TAG, "Updated views counter of post " + contentId);
-                    }
-                });
-        AnalyticsPresenter.getInstance().sendAnalyticsEvent(
-                TAG, AnalyticsPresenter.CATEGORY_POST_ACTIONS, AnalyticsPresenter.ACTION_POST_LIKED);
-    }
-
-    private void onLoadError(Throwable e) {
-        if (!Utils.isOnline(context)) {
-            Utils.askToTurnOnInternet(context);
-        }
-    }
-
 }

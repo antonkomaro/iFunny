@@ -23,9 +23,6 @@ public interface RestService {
     @GET("posts/{portal}")
     Observable<List<BaseModel>> loadData(@Path("portal") int portal, @Query("offset") int offset, @Query("limit") int limit);
 
-//    @GET("registration")
-//    Observable<TokenModel> getAccessToken(@Query("User-agent") String userAgent);
-
     @GET("counters/set")
     Observable<ResponseBody> postLike(@Query("marker") String marker);
 
