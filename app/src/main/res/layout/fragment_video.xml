@@ -29,7 +29,7 @@
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/thumb"
-                android:scaleType="fitCenter"
+                fresco:actualImageScaleType="fitCenter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 fresco:placeholderImage="@drawable/ph_loading"
