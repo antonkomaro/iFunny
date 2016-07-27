@@ -15,7 +15,7 @@
         android:textColor="@color/divider"
         android:visibility="visible" />
 
-    <samples.zoomable.ZoomableDraweeView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:layout_below="@+id/tv_content"
         android:id="@+id/iv_content"
         fresco:actualImageScaleType="fitCenter"

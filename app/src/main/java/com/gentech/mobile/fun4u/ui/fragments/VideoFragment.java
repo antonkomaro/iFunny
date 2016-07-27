@@ -23,7 +23,6 @@ import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import java.util.List;
 
 import butterknife.Bind;
-import samples.zoomable.ZoomableDraweeView;
 
 /**
  * Created by anton on 13.07.16.
@@ -35,7 +34,7 @@ public class VideoFragment extends ContentFragment {
     TextView tvContent;
 
     @Bind(R.id.thumb)
-    ZoomableDraweeView thumbnailView;
+    SimpleDraweeView thumbnailView;
 
     public static VideoFragment newInstance(Content content) {
         VideoFragment videoFragment = new VideoFragment();
@@ -76,7 +75,6 @@ public class VideoFragment extends ContentFragment {
             }
         });
 
-//        setupButtons();
     }
 
     private boolean canResolveIntent(Intent intent) {

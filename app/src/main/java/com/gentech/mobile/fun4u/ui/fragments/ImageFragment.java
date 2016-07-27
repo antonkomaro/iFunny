@@ -16,7 +16,6 @@ import com.gentech.mobile.fun4u.models.Content;
 import com.gentech.mobile.fun4u.utils.Config;
 
 import butterknife.Bind;
-import samples.zoomable.ZoomableDraweeView;
 
 /**
  * Created by anton on 13.07.16.
@@ -25,7 +24,7 @@ public class ImageFragment extends ContentFragment {
     public static final String TAG = VideoFragment.class.getSimpleName();
 
     @Bind(R.id.iv_content)
-    ZoomableDraweeView ivContent;
+    SimpleDraweeView ivContent;
 
     public static Fragment newInstance(Content content) {
         ImageFragment fragment = new ImageFragment();
@@ -40,11 +39,6 @@ public class ImageFragment extends ContentFragment {
         super.loadContent();
 
         ivContent.setImageURI(Uri.parse(getContent().getUrl()));
-
-        GenericDraweeHierarchy hierarchy = new GenericDraweeHierarchyBuilder(getResources())
-                .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
-                .build();
-        ivContent.setHierarchy(hierarchy);
 
         if (tvContent != null) {
             tvContent.setText(getContent().getTitle());

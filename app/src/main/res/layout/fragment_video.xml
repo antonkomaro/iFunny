@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center">
 
-            <samples.zoomable.ZoomableDraweeView
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/thumb"
                 android:scaleType="fitCenter"
                 android:layout_width="match_parent"

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.drawable.ProgressBarDrawable;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
@@ -19,7 +18,6 @@ import com.gentech.mobile.fun4u.models.Content;
 import com.gentech.mobile.fun4u.utils.Config;
 
 import butterknife.Bind;
-import samples.zoomable.ZoomableDraweeView;
 
 /**
  * Created by anton on 13.07.16.
@@ -29,7 +27,7 @@ public class GifFragment extends ContentFragment {
     public static final String TAG = GifFragment.class.getSimpleName();
 
     @Bind(R.id.iv_content)
-    ZoomableDraweeView ivContent;
+    SimpleDraweeView ivContent;
 
     public static Fragment newInstance(Content content) {
         GifFragment fragment = new GifFragment();
@@ -54,11 +52,6 @@ public class GifFragment extends ContentFragment {
                 .build();
 
         ivContent.setController(controller);
-
-        GenericDraweeHierarchy hierarchy = new GenericDraweeHierarchyBuilder(getResources())
-                .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
-                .build();
-        ivContent.setHierarchy(hierarchy);
 
     }
 
