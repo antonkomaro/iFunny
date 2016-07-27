@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gentech.mobile.fun4u.R;
-import com.gentech.mobile.fun4u.interfaces.ActionCallback;
 import com.gentech.mobile.fun4u.models.Content;
 import com.gentech.mobile.fun4u.utils.Config;
 import com.gentech.mobile.fun4u.utils.Utils;
@@ -24,22 +23,9 @@ import butterknife.ButterKnife;
 public abstract class ContentFragment extends Fragment {
     public static final String TAG = ContentFragment.class.getSimpleName();
 
-    private ActionCallback actionCallback;
-
+    @Nullable
     @Bind(R.id.tv_content)
     TextView tvContent;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.actionCallback = (ActionCallback) context;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        actionCallback = null;
-    }
 
     public Content getContent() {
         return getArguments().getParcelable(Config.CONTENT);
@@ -66,13 +52,6 @@ public abstract class ContentFragment extends Fragment {
     }
 
     protected abstract View inflateRootView(LayoutInflater layoutInflater, ViewGroup viewGroup);
-
-//    protected void setupButtons() {
-//        actionCallback.showLikes(getContent().getId());
-//        actionCallback.setupShare(getContent().getUrl());
-//        actionCallback.setLikeListener(getContent().getId());
-//        actionCallback.setupLikeBtn(getContext(), getContent().getId());
-//    }
 
     protected void loadContent() {
         if (!Utils.isOnline(getContext())) {

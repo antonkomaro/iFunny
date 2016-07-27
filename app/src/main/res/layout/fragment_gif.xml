@@ -4,16 +4,25 @@
     android:layout_height="match_parent"
     xmlns:fresco="http://schemas.android.com/apk/res-auto">
 
-    <include layout="@layout/item_title"/>
-
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/iv_content"
-        android:scaleType="fitXY"
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tv_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        fresco:placeholderImage="@drawable/ph_loading"
+        android:layout_height="50dp"
+        android:background="@color/color_dark"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/divider"
+        android:visibility="visible" />
+
+    <samples.zoomable.ZoomableDraweeView
+        android:layout_below="@+id/tv_content"
+        android:id="@+id/iv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        fresco:placeholderImage="@drawable/test2"
         android:background="@null"
         android:visibility="visible"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:fresco="http://schemas.android.com/apk/res-auto">
@@ -26,7 +27,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center">
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <samples.zoomable.ZoomableDraweeView
                 android:id="@+id/thumb"
                 android:scaleType="fitCenter"
                 android:layout_width="match_parent"
@@ -40,7 +41,8 @@
                 android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:visibility="visible"
-                android:src="@drawable/ic_play" />
+                android:src="@drawable/ic_play"
+                tools:ignore="ContentDescription" />
 
         </FrameLayout>
 

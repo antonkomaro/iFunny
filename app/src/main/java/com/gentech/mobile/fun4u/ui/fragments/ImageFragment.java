@@ -7,12 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.drawee.drawable.ScalingUtils;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.gentech.mobile.fun4u.R;
 import com.gentech.mobile.fun4u.models.Content;
 import com.gentech.mobile.fun4u.utils.Config;
 
 import butterknife.Bind;
+import samples.zoomable.ZoomableDraweeView;
 
 /**
  * Created by anton on 13.07.16.
@@ -21,7 +25,7 @@ public class ImageFragment extends ContentFragment {
     public static final String TAG = VideoFragment.class.getSimpleName();
 
     @Bind(R.id.iv_content)
-    SimpleDraweeView ivContent;
+    ZoomableDraweeView ivContent;
 
     public static Fragment newInstance(Content content) {
         ImageFragment fragment = new ImageFragment();
@@ -34,10 +38,18 @@ public class ImageFragment extends ContentFragment {
 
     protected void loadContent() {
         super.loadContent();
-        ivContent.setImageURI(Uri.parse(getContent().getUrl()));
-        tvContent.setText(getContent().getTitle());
 
-//        setupButtons();
+        ivContent.setImageURI(Uri.parse(getContent().getUrl()));
+
+        GenericDraweeHierarchy hierarchy = new GenericDraweeHierarchyBuilder(getResources())
+                .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
+                .build();
+        ivContent.setHierarchy(hierarchy);
+
+        if (tvContent != null) {
+            tvContent.setText(getContent().getTitle());
+        }
+
     }
 
     protected View inflateRootView(LayoutInflater layoutInflater, ViewGroup viewGroup) {
