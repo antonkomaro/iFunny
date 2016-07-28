@@ -21,7 +21,7 @@
         fresco:actualImageScaleType="fitCenter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        fresco:placeholderImage="@drawable/test2"
+        fresco:placeholderImage="@drawable/ph_loading"
         android:background="@null"
         android:visibility="visible"
         android:layout_alignParentBottom="true"/>
